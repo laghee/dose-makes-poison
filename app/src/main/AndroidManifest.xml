@@ -16,6 +16,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LearnMoreActivity"
+            android:label="@string/title_activity_learn_more"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.mills.cs250.dosemakespoison.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MyPantryActivity"
+            android:label="@string/title_activity_my_pantry"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.mills.cs250.dosemakespoison.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SearchResultsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_search_results"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

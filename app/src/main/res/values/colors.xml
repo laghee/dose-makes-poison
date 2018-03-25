@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primaryColor">#00838f</color>
+    <color name="primaryLightColor">#4fb3bf</color>
+    <color name="primaryDarkColor">#005662</color>
+    <color name="secondaryColor">#6a1b9a</color>
+    <color name="secondaryLightColor">#9c4dcc</color>
+    <color name="secondaryDarkColor">#38006b</color>
+    <color name="textColor">#ffffff</color>
+    <color name="secondaryColorGREY">#455a64</color>
+    <color name="secondaryLightColorGREY">#718792</color>
+    <color name="secondaryDarkColorGREY">#1c313a</color>
+    <color name="nicotine">#dd2c00</color>
+    <color name="arsenic">#ff6d00</color>
+    <color name="caffeine">#ffab00</color>
+    <color name="salt">#ffd600</color>
+    <color name="alcohol">#aeea00</color>
+    <color name="sugar">#64dd17</color>
+    <color name="water">#00c853</color>
 </resources>
