@@ -13,7 +13,7 @@ import android.view.View;
 
 /**
  * The top-level activity for Dose Makes the Poison. The accompanying view enables users to
- * launch {@link SearchResultsActivity}, {@link MyPantryActivity}, and {@link LearnMoreActivity}.
+ * launch {@link SearchResultsActivity}, {@link PantryActivity}, and {@link LearnMoreActivity}.
  */
 public class MainActivity extends Activity {
 
@@ -34,13 +34,13 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Enables launch of {@link MyPantryActivity}.
+     * Enables launch of {@link PantryActivity}.
      *
      * @param view my library view
      */
-    public void onViewLibrary(View view){
-        Intent intent = new Intent(this, MyPantryActivity.class);
-        startActivity(intent);
+    public void onBrowsePantry(View view){
+        Intent pantryIntent = new Intent(this, PantryActivity.class);
+        startActivity(pantryIntent);
     }
 
     /**
@@ -48,9 +48,9 @@ public class MainActivity extends Activity {
      *
      * @param v the view of random game generator
      */
-    public void onRandomGenerator(View v){
-        Intent randintent = new Intent(this, LearnMoreActivity.class);
-        startActivity(randintent);
+    public void onLearnMore(View v){
+        Intent learnIntent = new Intent(this, LearnMoreActivity.class);
+        startActivity(learnIntent);
     }
 }
 

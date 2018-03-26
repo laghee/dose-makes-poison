@@ -95,5 +95,7 @@
     <string name="title_activity_search_results">SearchResultsActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="searchButton">Ingredient Search</string>
+    <string name="search_button">Ingredient Search</string>
+    <string name="pantry_button">What\'s In My Pantry</string>
+    <string name="learn_button">Learn More About Toxicity</string>
 </resources>

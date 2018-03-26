@@ -6,10 +6,11 @@
     <color name="secondaryColor">#6a1b9a</color>
     <color name="secondaryLightColor">#9c4dcc</color>
     <color name="secondaryDarkColor">#38006b</color>
-    <color name="textColor">#ffffff</color>
+    <color name="textColorPrimary">#ffffff</color>
+    <color name="textColorSecondary">#000000</color>
     <color name="secondaryColorGREY">#455a64</color>
     <color name="secondaryLightColorGREY">#718792</color>
-    <color name="secondaryDarkColorGREY">#1c313a</color>
+    <color name="secondaryDarkColorGREY">#000101</color>
     <color name="nicotine">#dd2c00</color>
     <color name="arsenic">#ff6d00</color>
     <color name="caffeine">#ffab00</color>
