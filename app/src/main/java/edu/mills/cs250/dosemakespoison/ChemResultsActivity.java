@@ -19,7 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static edu.mills.cs250.dosemakespoison.PantryUtilities.*;
+import static edu.mills.cs250.dosemakespoison.PantryUtilities.getChem;
+import static edu.mills.cs250.dosemakespoison.PantryUtilities.getPantryIdIfExists;
+import static edu.mills.cs250.dosemakespoison.PantryUtilities.insertChem;
+import static edu.mills.cs250.dosemakespoison.PantryUtilities.removeChemByPantryId;
 
 /**
  * Activity for viewing ingredient details. Provides an interface for adding or removing ingredients
@@ -32,8 +35,6 @@ import static edu.mills.cs250.dosemakespoison.PantryUtilities.*;
 
 public class ChemResultsActivity extends Activity {
 
-    private boolean web = true;
-
     /**
      * Label for chem's id number. Called by {@link PantryActivity},
      * {@link MainActivity}.
@@ -44,7 +45,6 @@ public class ChemResultsActivity extends Activity {
      * {@link MainActivity}.
      */
     public static final String EXTRA_CLASSNAME = "class";
-
     private static final String SEARCH_ACTIVITY = "SearchResultsActivity";
     private static final String PANTRY_ACTIVITY = "PantryActivity";
     private static final String ERROR_RETRIEVE_CHEM = "Error retrieving chem.";
@@ -83,6 +83,7 @@ public class ChemResultsActivity extends Activity {
             return false;
         }
     };
+    private boolean web = true;
     private SQLiteDatabase db;
     private String chemName;
     private int ld50Val;
@@ -424,7 +425,6 @@ public class ChemResultsActivity extends Activity {
             try {
                 db = pantryDatabaseHelper.getWritableDatabase();
                 removeChemByPantryId(db, chemId);
-                }
                 db.close();
                 return chemId;
             } catch (SQLiteException e) {
@@ -451,5 +451,4 @@ public class ChemResultsActivity extends Activity {
             }
         }
     }
-
 }

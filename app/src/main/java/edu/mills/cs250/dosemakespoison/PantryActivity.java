@@ -76,7 +76,7 @@ public class PantryActivity extends ListActivity {
 
         @Override
         protected Cursor doInBackground(Void... chems) {
-            SQLiteOpenHelper chemPantryHelper = new SQLitePantryDatabaseHelper(PantryActivity.this);
+            SQLiteOpenHelper chemPantryHelper = new PantryDatabaseHelper(PantryActivity.this);
             db = chemPantryHelper.getReadableDatabase();
 
             try {

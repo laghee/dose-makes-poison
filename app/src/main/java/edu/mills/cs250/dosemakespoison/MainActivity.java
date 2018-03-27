@@ -13,7 +13,7 @@ import android.view.View;
 
 /**
  * The top-level activity for Dose Makes the Poison. The accompanying view enables users to
- * launch {@link SearchResultsActivity}, {@link PantryActivity}, and {@link LearnMoreActivity}.
+ * launch {@link ChemResultsActivity}, {@link PantryActivity}, and {@link LearnMoreActivity}.
  */
 public class MainActivity extends Activity {
 
@@ -24,12 +24,12 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Enables launch of {@link SearchResultsActivity}.
+     * Enables launch of {@link ChemResultsActivity}.
      *
      * @param view the search view
      */
     public void onSearch(View view){
-        Intent searchIntent = new Intent(this, SearchResultsActivity.class);
+        Intent searchIntent = new Intent(this, ChemResultsActivity.class);
         startActivity(searchIntent);
     }
 
