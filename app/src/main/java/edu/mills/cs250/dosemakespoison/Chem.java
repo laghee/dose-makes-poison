@@ -8,41 +8,23 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Chem {
 
-    private String spectrum, name, description;
-    private int ld50Num;
+    private String name, compareChem;
+    private int ld50Val, spectrumNum;
     private SQLiteDatabase db;
 
     /**
      * Constructs a chemical.
      *
-     * @param spectrum    the chemical shown on the toxicity spectrum
      * @param name        the chemical name
-     * @param ld50Num     the LD50 number of the chemical
-     * @param description the chemical description
+     * @param ld50Val     the LD50 number of the chemical
+     * @param compareChem the spectrum comparison chemical with closest LD50 value
+     * @param spectrumNum the number of block where the chemical falls on the toxicity spectrum
      */
-    public Chem(String spectrum, String name, int ld50Num, String description) {
-        this.spectrum = spectrum;
+    Chem (String name, int ld50Val, String compareChem, int spectrumNum) {
         this.name = name;
-        this.ld50Num = ld50Num;
-        this.description = description;
-    }
-
-    /**
-     * Gets the spectrum.
-     *
-     * @return the spectrum
-     */
-    public String getSpectrum() {
-        return spectrum;
-    }
-
-    /**
-     * Sets the spectrum.
-     *
-     * @param spectrum the chemical spectrum
-     */
-    public void setSpectrum(String spectrum) {
-        this.spectrum = spectrum;
+        this.ld50Val = ld50Val;
+        this.compareChem = compareChem;
+        this.spectrumNum = spectrumNum;
     }
 
     /**
@@ -55,7 +37,7 @@ public class Chem {
     }
 
     /**
-     * Sets the name, otherwise known as title.
+     * Sets the name.
      *
      * @param name the name of the chemical
      */
@@ -68,35 +50,53 @@ public class Chem {
      *
      * @return the LD50 number of the chemical
      */
-    public int getLd50Num() {
-        return ld50Num;
+    public int getLd50Val() {
+        return ld50Val;
     }
 
     /**
      * Sets the LD50 number.
      *
-     * @param ld50Num the LD50 number of the chemical
+     * @param ld50Val the LD50 number of the chemical
      */
-    public void setLd50Num(int ld50Num) {
-        this.ld50Num = ld50Num;
+    public void setLd50Val(int ld50Val) {
+        this.ld50Val = ld50Val;
     }
 
     /**
-     * Gets the description.
+     * Gets the comparison chemical.
      *
-     * @return the chemical description
+     * @return the comparison chemical on the spectrum closest in LD50 value
      */
-    public String getDescription() {
-        return description;
+    public String getCompareChem() {
+        return compareChem;
     }
 
     /**
-     * Sets the description.
+     * Sets the comparison chemical.
      *
-     * @param description the chemical description
+     * @param compareChem the the comparison chemical closest on the toxicity spectrum
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCompareChem(String compareChem) {
+        this.compareChem = compareChem;
+    }
+
+    /**
+     * Gets the spectrum position number.
+     *
+     * @return the spectrum block number
+     */
+    public int getSpectrumNum() {
+        return spectrumNum;
+    }
+
+    /**
+     * Sets the spectrum position number.
+     *
+     * @param spectrumNum the position number on the toxicity spectrum of the chemical
+     */
+    public void setSpectrumNum(int spectrumNum) {
+        this.spectrumNum = spectrumNum;
     }
 
     /**

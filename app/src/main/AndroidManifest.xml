@@ -37,6 +37,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_search_results"
             android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name=".ChemResultsActivity" />
     </application>
 
 </manifest>

@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static edu.mills.cs250.dosemakespoison.PantryDBUtilities.*;
+import static edu.mills.cs250.dosemakespoison.PantryUtilities.*;
 
 /**
  * Activity for viewing ingredient details. Provides an interface for adding or removing ingredients
@@ -85,8 +85,9 @@ public class ChemResultsActivity extends Activity {
     };
     private SQLiteDatabase db;
     private String chemName;
-    private String ld50Num;
-    private String chemImageUrl;
+    private int ld50Val;
+    private String compareChem;
+    private int spNum;
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -241,7 +242,7 @@ public class ChemResultsActivity extends Activity {
         CheckBox addToPantry = (CheckBox) findViewById(R.id.addToPantry);
 
         if (addToPantry.isChecked()) {
-            Chem chem = new Chem(chemImageUrl, chemName, ld50Num, chemNo);
+            Chem chem = new Chem(chemName, ld50Val, compareChem, spNum);
             new ChemResultsActivity.AddChemToPantryTask().execute(chem);
         } else {
             ContentValues chemNum = new ContentValues();
@@ -270,7 +271,7 @@ public class ChemResultsActivity extends Activity {
             Integer[] chemInfo = {0, chemId};
             try {
                 SQLiteOpenHelper pantryDatabaseHelper =
-                        new SQLitePantryDatabaseHelper(ChemResultsActivity.this);
+                        new PantryDatabaseHelper(ChemResultsActivity.this);
                 db = pantryDatabaseHelper.getReadableDatabase();
                 Integer pantryId = getPantryIdIfExists(db, chemId);
                 if (pantryId > 0) {
@@ -348,7 +349,7 @@ public class ChemResultsActivity extends Activity {
 
             try {
                 SQLiteOpenHelper pantryDatabaseHelper =
-                        new SQLitePantryDatabaseHelper(ChemResultsActivity.this);
+                        new PantryDatabaseHelper(ChemResultsActivity.this);
                 db = pantryDatabaseHelper.getReadableDatabase();
                 Chem chem = getChem(db, chemId);
                 return chem;
@@ -361,18 +362,18 @@ public class ChemResultsActivity extends Activity {
         @Override
         protected void onPostExecute(Chem chem) {
             if (chem != null) {
-                //Populate the chem spectrum
-                ImageView photo = (ImageView) findViewById(R.id.photo);
-                Picasso.with(ChemResultsActivity.this).load(chem.getImage()).into(photo);
 
                 //Populate the chem name
                 TextView name = (TextView) findViewById(R.id.chem_name);
                 name.setText(chem.getName());
 
+                //Populate the chem blurb
+                TextView ld50 = (TextView) findViewById(R.id.ld50);
+                ld50.setText("The LD50 value for " + chem.getName() + " is: " + chem.getLd50Val() +
+                        ". This is about as toxic as: " + chem.getCompareChem() + ".");
                 //Populate the chem description
-                TextView description = (TextView) findViewById(R.id.description);
-                description.setText(chem.getDescription());
-
+                ImageView spectrum = (ImageView) findViewById(R.id.spectrum);
+                spectrum.setImageResource(chem.getSpectrumNum());
 
                 //Populate the pantry checkbox
                 CheckBox addToPantry = (CheckBox) findViewById(R.id.addToPantry);
@@ -392,7 +393,7 @@ public class ChemResultsActivity extends Activity {
             Chem newChem = chem[0];
             try {
                 SQLiteOpenHelper pantryDatabaseHelper =
-                        new SQLitePantryDatabaseHelper(ChemResultsActivity.this);
+                        new PantryDatabaseHelper(ChemResultsActivity.this);
                 db = pantryDatabaseHelper.getWritableDatabase();
                 insertChem(db, newChem);
                 db.close();
@@ -419,13 +420,10 @@ public class ChemResultsActivity extends Activity {
         @Override
         protected Integer doInBackground(ContentValues... chems) {
             Integer chemId = chems[0].getAsInteger(PANTRYID);
-            SQLiteOpenHelper pantryDatabaseHelper = new SQLitePantryDatabaseHelper(ChemResultsActivity.this);
+            SQLiteOpenHelper pantryDatabaseHelper = new PantryDatabaseHelper(ChemResultsActivity.this);
             try {
                 db = pantryDatabaseHelper.getWritableDatabase();
-                if (web) {
-                    removeChemByWebId(db, chemId);
-                } else {
-                    removeChemByPantryId(db, chemId);
+                removeChemByPantryId(db, chemId);
                 }
                 db.close();
                 return chemId;
