@@ -7,7 +7,7 @@
         <!--<item name="android:background">@color/primaryDarkColor</item>-->
         <item name="android:colorPrimary">@color/primaryColor</item>
         <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
-        <!--<item name="colorPrimaryLight">@colors/primaryLightColor</item>-->
+        <!--<item name="@colors/primaryLighColor">@colors/primaryLightColor</item>-->
         <item name="android:colorAccent">@color/secondaryColor</item>
         <!--<item name="colorSecondaryDark">@colors/secondaryDarkColor</item>-->
         <!--<item name="colorSecondaryLight">@color/secondaryLightColor</item>-->

@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
-    tools:context="edu.mills.cs250.dosemakespoison.SearchResultsActivity">
+    android:background="@color/primaryLightColor"
+    tools:context="edu.mills.cs250.dosemakespoison.ChemResultsActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -15,7 +15,7 @@
         android:gravity="center"
         android:keepScreenOn="true"
         android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
+        android:textColor="@color/secondaryDarkColor"
         android:textSize="50sp"
         android:textStyle="bold" />
 

@@ -33,11 +33,20 @@
                 android:value="edu.mills.cs250.dosemakespoison.MainActivity" />
         </activity>
         <activity
-            android:name=".SearchResultsActivity"
+            android:name=".ChemResultsActivity"
+            android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_search_results"
-            android:theme="@style/FullscreenTheme"></activity>
-        <activity android:name=".ChemResultsActivity" />
+            android:theme="@style/FullscreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+
     </application>
 
 </manifest>

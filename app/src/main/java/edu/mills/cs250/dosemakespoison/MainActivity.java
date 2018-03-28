@@ -7,9 +7,12 @@
 package edu.mills.cs250.dosemakespoison;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
 
 /**
  * The top-level activity for Dose Makes the Poison. The accompanying view enables users to
@@ -24,7 +27,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Enables launch of {@link ChemResultsActivity}.
+     * Enables search widget for user input.
      *
      * @param view the search view
      */
@@ -32,6 +35,7 @@ public class MainActivity extends Activity {
         Intent searchIntent = new Intent(this, ChemResultsActivity.class);
         startActivity(searchIntent);
     }
+
 
     /**
      * Enables launch of {@link PantryActivity}.
