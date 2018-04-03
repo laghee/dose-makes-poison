@@ -22,8 +22,9 @@
         android:cropToPadding="true"
         android:onClick="onSearch"
         android:scaleType="fitCenter"
-        android:src="@android:drawable/ic_menu_search"
-        android:tint="@color/primaryColor" />
+        android:src="@drawable/search"
+        android:tint="@color/secondaryDarkColor" />
+
 
     <ImageButton
         android:id="@+id/pantryButton"
@@ -37,8 +38,9 @@
         android:cropToPadding="true"
         android:onClick="onBrowsePantry"
         android:scaleType="fitCenter"
-        android:src="@drawable/magnify"
-        android:tint="@color/primaryColor" />
+        android:src="@drawable/pantry"
+        android:tint="@color/secondaryDarkColor" />
+
 
     <ImageButton
         android:id="@+id/learnButton"
@@ -53,7 +55,8 @@
         android:cropToPadding="true"
         android:onClick="onLearnMore"
         android:scaleType="fitCenter"
-        android:src="@android:drawable/ic_menu_edit"
-        android:tint="@color/primaryColor" />
+        android:src="@drawable/research"
+    android:tint="@color/secondaryDarkColor" />
+
 
 </FrameLayout>

@@ -7,12 +7,9 @@
 package edu.mills.cs250.dosemakespoison;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.SearchView;
 
 /**
  * The top-level activity for Dose Makes the Poison. The accompanying view enables users to

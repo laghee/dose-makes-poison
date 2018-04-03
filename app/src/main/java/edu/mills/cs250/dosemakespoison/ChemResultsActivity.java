@@ -1,39 +1,36 @@
+/*
+ * Implementation of Dose Makes the Poison application. Created for Mills
+ * CS250: Master's Thesis, Spring 2018.
+ *
+ * @author Kate Manning
+ */
 package edu.mills.cs250.dosemakespoison;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-//import static edu.mills.cs250.dosemakespoison.PantryUtilities.getChem;
-//import static edu.mills.cs250.dosemakespoison.PantryUtilities.getPantryIdIfExists;
-//import static edu.mills.cs250.dosemakespoison.PantryUtilities.insertChem;
-//import static edu.mills.cs250.dosemakespoison.PantryUtilities.removeChemByPantryId;
 
 /**
  * Activity for viewing ingredient details. Provides an interface for adding or removing ingredients
  * from a local pantry by clicking a checkbox. If a user removes an ingredient,
  * {@link PantryActivity} is launched and they are taken back to their pantry.
- * <p>
+ */
+
+/**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
@@ -74,20 +71,6 @@ public class ChemResultsActivity extends Activity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
     private boolean web = true;
     private SQLiteDatabase db;
     private String chemName;
@@ -131,18 +114,32 @@ public class ChemResultsActivity extends Activity {
             hide();
         }
     };
+    /**
+     * Touch listener to use for in-layout UI controls to delay hiding the
+     * system UI. This is to prevent the jarring behavior of controls going away
+     * while interacting with activity UI.
+     */
+    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (AUTO_HIDE) {
+                delayedHide(AUTO_HIDE_DELAY_MILLIS);
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chem_results);
 
-           // Get the intent, verify the action and get the query
-            Intent intent = getIntent();
-            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-                String query = intent.getStringExtra(SearchManager.QUERY);
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
 //                doMySearch(query);
-            }
+        }
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
@@ -188,26 +185,48 @@ public class ChemResultsActivity extends Activity {
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
-        searchView.setSubmitButtonEnabled(true);
+        Log.d("ChemResults-onCreateOpt", "searchManager = " + searchManager);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        Log.d("ChemResults-onCreateOpt", "searchView = " + searchView);
+        Log.d("ChemResults-onCreateOpt", "menu.findItem(R.id.action_search) = " +
+                menu.findItem(R.id.action_search));
+        Log.d("ChemResults-onCreateOpt", "Returns from getActionView" + menu.findItem(R.id.action_search).getActionView());
+        if (searchManager != null && searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setSubmitButtonEnabled(true);
+            return true;
+        }
+
+//        else {
+//            searchView.setSearchableInfo(null);
+//        }
+//        searchView.setIconifiedByDefault(true);
 
         // Configure the search info and add any event listeners...
 //
 //            return super.onCreateOptionsMenu(menu);
 
-        return true;
+        return false;
     }
 
-//    @Override
-//    public boolean onSearchRequested() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == (R.id.action_search)) {
+            Toast.makeText(getApplicationContext(), "Search = " + onSearchRequested(), Toast.LENGTH_LONG).show();
+            return onSearchRequested();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onSearchRequested() {
 //        Bundle appData = new Bundle();
-//        appData.putBoolean(ChemResultsActivity.JARGON, true);
-//        startSearch(null, false, appData, false);
+//        appData.putBoolean(ChemResultsActivity., true);
+//        startSearch(null, false, false);
 //        return true;
-//    }
+        return super.onSearchRequested();
+    }
 
     /**
      * Enables relaunch of {@link MainActivity}.

@@ -1,3 +1,9 @@
+/*
+ * Implementation of Dose Makes the Poison application. Created for Mills
+ * CS250: Master's Thesis, Spring 2018.
+ *
+ * @author Kate Manning
+ */
 package edu.mills.cs250.dosemakespoison;
 
 import android.database.sqlite.SQLiteDatabase;

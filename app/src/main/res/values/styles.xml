@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <!--<item name="android:windowActionBarOverlay">true</item>-->
+        <item name="android:windowActionBarOverlay">true</item>
         <!--<item name="android:windowBackground">@color/primaryLightColor</item>-->
         <!--<item name="android:background">@color/primaryDarkColor</item>-->
         <item name="android:colorPrimary">@color/primaryColor</item>
@@ -11,21 +11,20 @@
         <item name="android:colorAccent">@color/secondaryColor</item>
         <!--<item name="colorSecondaryDark">@colors/secondaryDarkColor</item>-->
         <!--<item name="colorSecondaryLight">@color/secondaryLightColor</item>-->
-        <item name="android:textColorPrimary">@color/secondaryDarkColorGREY</item>
-        <item name="android:colorBackground">@android:color/darker_gray</item>
-        <item name="android:textColorSecondary">@color/textColorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:colorBackground">@color/primaryLightColor</item>
+        <item name="android:textColorSecondary">@color/secondaryDarkColorGREY</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@color/secondaryDarkColor</item>
+        <item name="android:background">@color/primaryColor</item>
     </style>
 
 </resources>
