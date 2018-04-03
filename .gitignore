@@ -31,3 +31,6 @@ local.properties
 # IntelliJ
 *.iml
 .idea/
+/gradlew
+/gradlew.bat
+/settings.gradle
