@@ -4,18 +4,19 @@
  *
  * @author Kate Manning
  */
-package edu.mills.cs250.dosemakespoison;
+package edu.mills.cs250.toxsense;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 /**
  * The top-level activity for Dose Makes the Poison. The accompanying view enables users to
- * launch {@link ChemResultsActivity}, {@link PantryActivity}, and {@link LearnMoreActivity}.
+ * launch {@link ChemCompareActivity}, {@link PantryActivity}, and {@link LearnMoreActivity}.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,7 @@ public class MainActivity extends Activity {
      * @param view the search view
      */
     public void onSearch(View view){
-        Intent searchIntent = new Intent(this, ChemResultsActivity.class);
-        startActivity(searchIntent);
+        startActivity(new Intent(this, ChemCompareActivity.class));
     }
 
 
@@ -40,8 +40,7 @@ public class MainActivity extends Activity {
      * @param view my library view
      */
     public void onBrowsePantry(View view){
-        Intent pantryIntent = new Intent(this, PantryActivity.class);
-        startActivity(pantryIntent);
+        startActivity(new Intent(this, PantryActivity.class));
     }
 
     /**
@@ -50,8 +49,7 @@ public class MainActivity extends Activity {
      * @param v the view of random game generator
      */
     public void onLearnMore(View v){
-        Intent learnIntent = new Intent(this, LearnMoreActivity.class);
-        startActivity(learnIntent);
+        startActivity(new Intent(this, LearnMoreActivity.class));
     }
 }
 

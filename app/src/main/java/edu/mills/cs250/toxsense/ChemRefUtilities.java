@@ -4,18 +4,22 @@
  *
  * @author Kate Manning
  */
-package edu.mills.cs250.dosemakespoison;
+package edu.mills.cs250.toxsense;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import static edu.mills.cs250.dosemakespoison.PantryDatabaseHelper.*;
+import static edu.mills.cs250.toxsense.PantryDatabaseHelper.COMPARE_COL;
+import static edu.mills.cs250.toxsense.PantryDatabaseHelper.LD50_COL;
+import static edu.mills.cs250.toxsense.PantryDatabaseHelper.NAME_COL;
+import static edu.mills.cs250.toxsense.PantryDatabaseHelper.PANTRY_TABLE;
+import static edu.mills.cs250.toxsense.PantryDatabaseHelper.SPNUM_COL;
 
-public class PantryUtilities {
+public class ChemRefUtilities {
 
-        private PantryUtilities() {}
+        private ChemRefUtilities() {}
 
         /**
          * Retrieves chemical from local database based on the row id.
@@ -33,7 +37,7 @@ public class PantryUtilities {
 
             Chem chem = null;
             if (cursor.moveToFirst()) {
-                chem = new Chem(cursor.getString(0), cursor.getInt(1), cursor.getString(2),
+                chem = new Chem(cursor.getString(0), cursor.getInt(1), cursor.getInt(1), cursor.getString(2),
                         cursor.getInt(3));
             }
             return chem;
@@ -66,16 +70,6 @@ public class PantryUtilities {
          */
         public static void removeChemByPantryId(SQLiteDatabase db, Integer pantryId) {
             db.delete(PANTRY_TABLE, "_id = ?", new String[]{pantryId.toString()});
-        }
-
-        /**
-         * Removes a chemical from the local database by the name of its comparison chemical.
-         *
-         * @param db the local database
-         * @param compareChem the comparison chemical
-         */
-        public static void removeChemByCompareChem(SQLiteDatabase db, String compareChem) {
-            db.delete(PANTRY_TABLE, COMPARE_COL + " = ?", new String[] {compareChem});
         }
 
         /**

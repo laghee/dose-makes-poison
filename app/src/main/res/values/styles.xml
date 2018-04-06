@@ -1,30 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:windowActionBarOverlay">true</item>
-        <!--<item name="android:windowBackground">@color/primaryLightColor</item>-->
-        <!--<item name="android:background">@color/primaryDarkColor</item>-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
         <item name="android:colorPrimary">@color/primaryColor</item>
         <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
-        <!--<item name="@colors/primaryLighColor">@colors/primaryLightColor</item>-->
         <item name="android:colorAccent">@color/secondaryColor</item>
-        <!--<item name="colorSecondaryDark">@colors/secondaryDarkColor</item>-->
-        <!--<item name="colorSecondaryLight">@color/secondaryLightColor</item>-->
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="android:colorBackground">@color/primaryLightColor</item>
+        <item name="android:colorBackground">@color/secondaryLightColorGREY</item>
         <item name="android:textColorSecondary">@color/secondaryDarkColorGREY</item>
-    </style>
-
-    <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-    </style>
-
-    <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
     </style>
 
 </resources>
+
+    <!--<item name="android:windowActionBarOverlay">true</item>-->

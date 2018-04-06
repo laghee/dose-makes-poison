@@ -10,7 +10,7 @@
     <color name="textColorSecondary">#000000</color>
     <color name="secondaryColorGREY">#455a64</color>
     <color name="secondaryLightColorGREY">#718792</color>
-    <color name="secondaryDarkColorGREY">#000101</color>
+    <color name="secondaryDarkColorGREY">#212121</color>
     <color name="nicotine">#dd2c00</color>
     <color name="arsenic">#ff6d00</color>
     <color name="caffeine">#ffab00</color>
@@ -18,4 +18,5 @@
     <color name="alcohol">#aeea00</color>
     <color name="sugar">#64dd17</color>
     <color name="water">#00c853</color>
+    <color name="colorBackground">#718792</color>
 </resources>

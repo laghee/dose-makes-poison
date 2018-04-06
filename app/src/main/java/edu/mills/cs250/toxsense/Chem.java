@@ -4,7 +4,7 @@
  *
  * @author Kate Manning
  */
-package edu.mills.cs250.dosemakespoison;
+package edu.mills.cs250.toxsense;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -15,19 +15,21 @@ import android.database.sqlite.SQLiteDatabase;
 public class Chem {
 
     private String name, compareChem;
-    private int ld50Val, spectrumNum;
+    private int chemidNum, ld50Val, spectrumNum;
     private SQLiteDatabase db;
 
     /**
      * Constructs a chemical.
      *
      * @param name        the chemical name
+     * @param chemidNum      the ChemID database number of the chemical
      * @param ld50Val     the LD50 number of the chemical
      * @param compareChem the spectrum comparison chemical with closest LD50 value
      * @param spectrumNum the number of block where the chemical falls on the toxicity spectrum
      */
-    Chem (String name, int ld50Val, String compareChem, int spectrumNum) {
+    Chem (String name, int chemidNum, int ld50Val, String compareChem, int spectrumNum) {
         this.name = name;
+        this.chemidNum = chemidNum;
         this.ld50Val = ld50Val;
         this.compareChem = compareChem;
         this.spectrumNum = spectrumNum;
@@ -49,6 +51,24 @@ public class Chem {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Gets the ChemID database number.
+     *
+     * @return the ChemID number of the chemical
+     */
+    public int getChemidNum() {
+        return chemidNum;
+    }
+
+    /**
+     * Sets the ChemID number.
+     *
+     * @param chemidNum the ChemID number of the chemical
+     */
+    public void setChemidNum(int chemidNum) {
+        this.chemidNum = chemidNum;
     }
 
     /**

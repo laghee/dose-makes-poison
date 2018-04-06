@@ -1,4 +1,4 @@
-package edu.mills.cs250.dosemakespoison;
+package edu.mills.cs250.toxsense;
 
 import org.junit.Test;
 

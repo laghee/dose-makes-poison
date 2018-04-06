@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.mills.cs250.dosemakespoison">
+    package="edu.mills.cs250.toxsense">
 
     <application
         android:allowBackup="true"
@@ -12,42 +12,56 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LearnMoreActivity"
             android:label="@string/title_activity_learn_more"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="edu.mills.cs250.toxsense.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.mills.cs250.dosemakespoison.MainActivity" />
+                android:value="edu.mills.cs250.toxsense.MainActivity" />
         </activity>
         <activity
             android:name=".PantryActivity"
             android:label="@string/title_activity_my_pantry"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.mills.cs250.dosemakespoison.MainActivity" />
+            android:parentActivityName="edu.mills.cs250.toxsense.MainActivity">
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchableActivity" />
+                android:value="edu.mills.cs250.toxsense.ChemCompareActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.mills.cs250.toxsense.MainActivity" />
         </activity>
         <activity
-            android:name=".ChemResultsActivity"
-            android:launchMode="singleTop"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:name=".ChemCompareActivity"
             android:label="@string/title_search_activity"
-            android:theme="@style/FullscreenTheme">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.mills.cs250.toxsense.MainActivity" />
         </activity>
-
+        <activity
+            android:name=".ExampleActivity"
+            android:label="@string/title_activity_example"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.mills.cs250.toxsense.MainActivity" />
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="edu.mills.cs250.toxsense.ChemCompareActivity" />
+        </activity>
     </application>
 
 </manifest>

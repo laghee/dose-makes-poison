@@ -1,4 +1,4 @@
-package edu.mills.cs250.dosemakespoison;
+package edu.mills.cs250.toxsense;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("edu.mills.cs250.dosemakespoison", appContext.getPackageName());
+        assertEquals("edu.mills.cs250.toxsense", appContext.getPackageName());
     }
 }

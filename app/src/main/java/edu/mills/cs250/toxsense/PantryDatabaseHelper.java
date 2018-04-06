@@ -4,7 +4,7 @@
  *
  * @author Kate Manning
  */
-package edu.mills.cs250.dosemakespoison;
+package edu.mills.cs250.toxsense;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,6 +21,11 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
      * Name of column in {@link #PANTRY_TABLE} with name of chemical.
      */
     static final String NAME_COL = "NAME";
+
+    /**
+     * Name of column in {@link #PANTRY_TABLE} with CAS Registry number.
+     */
+    static final String CHEMID_COL = "CHEMIDNUM";
 
     /**
      * Name of column in {@link #PANTRY_TABLE} with LD50 value of chemical.
@@ -62,6 +67,7 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 1) {
             db.execSQL("CREATE TABLE PANTRY (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + NAME_COL + " TEXT NOT NULL, "
+                    + CHEMID_COL + " INTEGER NOT NULL, "
                     + LD50_COL + " INTEGER NOT NULL, "
                     + COMPARE_COL + " TEXT NOT NULL, "
                     + SPNUM_COL + " INTEGER NOT NULL);");

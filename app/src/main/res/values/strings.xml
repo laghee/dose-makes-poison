@@ -1,7 +1,15 @@
 <resources>
-    <string name="app_name">ChemSense</string>
     <string name="app_label">ToxSense</string>
     <string name="title_activity_learn_more">LearnMoreActivity</string>
+    <string name="empty_pantry">Your pantry is empty! (Ingredients you add from a search will be stored here.)</string>
+    <string name="title_activity_my_pantry">Pantry</string>
+    <string name="title_search_activity">Search</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Search ingredients</string>
+    <string name="search_button">Ingredient Search</string>
+    <string name="pantry_button">What\'s In My Pantry</string>
+    <string name="learn_button">Learn More About Toxicity</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -53,31 +61,6 @@
         "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
         "y-axis only. The following example shows the card with a height of 6dp.\n\n"
 
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
         "Avoiding elevation interference.\n\n"
 
         "Components with responsive elevations may encounter other components as they move between "
@@ -91,14 +74,8 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="title_activity_my_pantry">MyPantryActivity</string>
 
-    <string name="title_search_activity">ChemResultsActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="search_button">Ingredient Search</string>
-    <string name="action_search">Search</string>
-    <string name="search_hint">Search for an ingredient</string>
-    <string name="pantry_button">What\'s In My Pantry</string>
-    <string name="learn_button">Learn More About Toxicity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_example">ExampleActivity</string>
 </resources>
