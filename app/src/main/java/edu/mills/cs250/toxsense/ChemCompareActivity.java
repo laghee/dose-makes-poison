@@ -7,6 +7,7 @@
 package edu.mills.cs250.toxsense;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,7 +69,7 @@ public class ChemCompareActivity extends AppCompatActivity {
         setSupportActionBar(toxTool);
         Log.d("ChemCompareActivity", "getSupportActionBar() returns: " + getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View view) -> {
@@ -123,17 +124,13 @@ public class ChemCompareActivity extends AppCompatActivity {
         Log.d("ChemResults-onCreateOpt", "searchManager = " + searchManager);
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView sv = (SearchView) search.getActionView();
+        Log.d("Chem-onCreateOpt", "ActionView= " + sv);
         // Get the SearchView and set the searchable configuration
-        if (sv != null) {
-            sv.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            sv.setSubmitButtonEnabled(true);
-            return true;
-        }
-
-        return super.onCreateOptionsMenu(menu);
+        sv.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        Log.d("Chem-onCreateOpts", "getComponentName()= " + getComponentName());
+        Log.d("Chem-onCreateOpts", "sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
+        return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

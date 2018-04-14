@@ -33,8 +33,8 @@ public class PantryUtilities {
 
             Chem chem = null;
             if (cursor.moveToFirst()) {
-                chem = new Chem(cursor.getString(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3),
-                        cursor.getInt(4));
+                chem = new Chem(cursor.getString(0), cursor.getString(1), cursor.getInt(2),
+                        cursor.getString(3), cursor.getInt(4));
             }
 
             cursor.close();
@@ -52,7 +52,7 @@ public class PantryUtilities {
         public static long insertChem(SQLiteDatabase db, Chem chem) {
             ContentValues chemValues = new ContentValues();
             chemValues.put(NAME_COL, chem.getName());
-            chemValues.put(CHEMID_COL, chem.getChemidNum());
+            chemValues.put(CHEMID_COL, chem.getChemId());
             chemValues.put(LD50_COL, chem.getLd50Val());
             chemValues.put(COMPARE_COL, chem.getCompareChem());
             chemValues.put(SPNUM_COL, chem.getSpectrumNum());

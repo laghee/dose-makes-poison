@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_frame"
     android:layout_width="match_parent"
@@ -8,54 +8,75 @@
     android:fitsSystemWindows="true"
     tools:context="edu.mills.cs250.toxsense.MainActivity">
 
-    <ImageButton
-        android:id="@+id/searchButton"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_gravity="top|start"
-        android:layout_margin="25dp"
-        android:adjustViewBounds="true"
-        android:background="@android:drawable/screen_background_light"
-        android:contentDescription="@string/search_button"
-        android:cropToPadding="true"
-        android:onClick="onSearch"
-        android:scaleType="fitCenter"
-        android:src="@drawable/search"
-        android:tint="@color/secondaryColor" />
+    <TextView
+        android:id="@+id/main_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/app_label"
+        android:textSize="90sp"
+        android:textColor="@color/secondaryColor"
+        android:textStyle="bold|italic"
+        android:fontFamily="cursive"
+        />
+
+    <FrameLayout
+        android:id="@+id/button_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/main_title" >
+
+        <ImageButton
+            android:id="@+id/searchButton"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="20dp"
+            android:adjustViewBounds="true"
+            android:background="@android:drawable/screen_background_light"
+            android:contentDescription="@string/search_button"
+            android:cropToPadding="true"
+            android:onClick="onSearch"
+            android:scaleType="fitCenter"
+            android:src="@drawable/search"
+            android:tint="@color/secondaryColor" />
 
 
-    <ImageButton
-        android:id="@+id/pantryButton"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_gravity="center"
-        android:layout_margin="25dp"
-        android:adjustViewBounds="true"
-        android:background="@android:drawable/screen_background_light"
-        android:contentDescription="@string/pantry_button"
-        android:cropToPadding="true"
-        android:onClick="onBrowsePantry"
-        android:scaleType="fitCenter"
-        android:src="@drawable/pantry"
-        android:tint="@color/secondaryColor" />
+        <ImageButton
+            android:id="@+id/pantryButton"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_margin="15dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:background="@android:drawable/screen_background_light"
+            android:contentDescription="@string/pantry_button"
+            android:cropToPadding="true"
+            android:onClick="onBrowsePantry"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pantry"
+            android:tint="@color/secondaryColor" />
 
 
-    <ImageButton
-        android:id="@+id/learnButton"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="25dp"
-        android:adjustViewBounds="true"
-        android:background="@android:drawable/screen_background_light"
-        android:contentDescription="@string/learn_button"
-        android:cropToPadding="true"
-        android:onClick="onLearnMore"
-        android:scaleType="fitCenter"
-        android:src="@drawable/research"
-        android:tint="@color/secondaryColor" />
+        <ImageButton
+            android:id="@+id/learnButton"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_margin="20dp"
+            android:layout_gravity="bottom|end"
+            android:adjustViewBounds="true"
+            android:background="@android:drawable/screen_background_light"
+            android:contentDescription="@string/learn_button"
+            android:cropToPadding="true"
+            android:onClick="onLearnMore"
+            android:scaleType="fitCenter"
+            android:src="@drawable/research"
+            android:tint="@color/secondaryColor" />
 
-</FrameLayout>
+    </FrameLayout>
+
+</RelativeLayout>
 
     <!--<android.support.v7.widget.AppCompatTextView-->
     <!--android:layout_width="match_parent"-->

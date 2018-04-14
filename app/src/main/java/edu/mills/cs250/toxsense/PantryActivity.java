@@ -6,6 +6,9 @@
  */
 package edu.mills.cs250.toxsense;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,8 +17,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -40,7 +45,6 @@ public class PantryActivity extends AppCompatActivity {
     private Cursor cursor;
     private CursorAdapter chemCursorAdapter;
     private ListView pantryList;
-    private TextView emptyPantry;
 
     //view saved ingredients
     @Override
@@ -51,7 +55,6 @@ public class PantryActivity extends AppCompatActivity {
         Log.d("PantryActivity", "pantryList = " + pantryList);
         setSupportActionBar(findViewById(R.id.tox_toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Log.d("PantryActivity", "ChemPantryTask about to run.");
         new ChemPantryTask().execute();
         Log.d("PantryActivity", "ChemPantryTask just ran.");
@@ -62,6 +65,21 @@ public class PantryActivity extends AppCompatActivity {
             intent.putExtra(ChemCompareActivity.EXTRA_CLASSNAME, PANTRY_ACTIVITY);
             startActivity(intent);
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the options menu from XML
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        Log.d("ChemResults-onCreateOpt", "searchManager = " + searchManager);
+        MenuItem search = menu.findItem(R.id.action_search);
+        SearchView sv = (SearchView) search.getActionView();
+        // Get the SearchView and set the searchable configuration
+        sv.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, ChemCompareActivity.class)));
+        Log.d("Pantry-onCreateOpts", "getComponentName()= " + getComponentName());
+        Log.d("Pantry-onCreateOpts", "sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
+        return true;
     }
 
     @Override
@@ -126,9 +144,9 @@ public class PantryActivity extends AppCompatActivity {
                 toast.show();
             } else {
                 Log.d("PantryActivity", "Cursor is empty.");
-                emptyPantry = findViewById(R.id.empty);
-                Log.d("PantryActivity/empty", "get empty view: " + emptyPantry);
+                TextView emptyPantry = findViewById(R.id.empty);
                 emptyPantry.setVisibility(View.VISIBLE);
+                emptyPantry.bringToFront();
                 Toast toast = Toast.makeText(PantryActivity.this, PANTRY_IS_EMPTY, Toast.LENGTH_LONG);
                 toast.show();
             }

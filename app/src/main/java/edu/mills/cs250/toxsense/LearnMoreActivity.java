@@ -20,7 +20,6 @@ public class LearnMoreActivity extends AppCompatActivity {
         Toolbar toxToolbar = findViewById(R.id.tox_toolbar);
         setSupportActionBar(toxToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Log.d("LearnMore", "Toolbar value is: " + toxToolbar);
         Log.d("Learn More", "getSupportActionBar returns: " + getSupportActionBar());
     }

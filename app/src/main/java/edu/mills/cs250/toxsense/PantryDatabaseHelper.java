@@ -25,7 +25,7 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
     /**
      * Name of column in {@link #PANTRY_TABLE} with CAS Registry number.
      */
-    static final String CHEMID_COL = "CHEMIDNUM";
+    static final String CHEMID_COL = "CHEMID";
 
     /**
      * Name of column in {@link #PANTRY_TABLE} with LD50 value of chemical.
@@ -45,7 +45,7 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
     /**
      * A local SQLite database for inserting into and deleting chemicals from a local pantry.
      */
-    private static final String DB_NAME = "pantrydatabase"; // the name of our database
+    private static final String DB_NAME = "pantry_db"; // the name of our database
     private static final int DB_VERSION = 1; // the version of the database
 
 
@@ -67,7 +67,7 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 1) {
             db.execSQL("CREATE TABLE PANTRY (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + NAME_COL + " TEXT NOT NULL, "
-                    + CHEMID_COL + " INTEGER NOT NULL, "
+                    + CHEMID_COL + " TEXT NOT NULL, "
                     + LD50_COL + " INTEGER NOT NULL, "
                     + COMPARE_COL + " TEXT NOT NULL, "
                     + SPNUM_COL + " INTEGER NOT NULL);");
