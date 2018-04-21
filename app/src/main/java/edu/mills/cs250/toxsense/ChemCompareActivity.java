@@ -7,7 +7,6 @@
 package edu.mills.cs250.toxsense;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,12 +25,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
 /**Activity for viewing ingredient comparison. Provides an interface for adding or removing ingredients
  * from a local pantry by clicking a checkbox. If a user removes an ingredient,
  * {@link PantryActivity} is launched and they are taken back to their pantry.
  */
 
 public class ChemCompareActivity extends AppCompatActivity {
+
+    private static final String TAG = "ChemCompare";
 
     /**
      * Label for chem's id number. Called by {@link PantryActivity},
@@ -65,11 +74,13 @@ public class ChemCompareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chem_compare);
         Toolbar toxTool = (Toolbar) findViewById(R.id.tox_toolbar);
-        Log.d("ChemCompare", "Toolbar value is: " + toxTool);
+        Log.d(TAG, "Toolbar value is: " + toxTool);
         setSupportActionBar(toxTool);
-        Log.d("ChemCompareActivity", "getSupportActionBar() returns: " + getSupportActionBar());
+        Log.d(TAG, "getSupportActionBar() returns: " + getSupportActionBar());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        handleIntent(getIntent());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener((View view) -> {
@@ -79,13 +90,6 @@ public class ChemCompareActivity extends AppCompatActivity {
                     .setAction("Action", null).show();
         });
 
-//        // Get the intent, verify the action and get the query
-//        Intent intent = getIntent();
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//            Log.d("ChemCompare", "Intent = ACTION_SEARCH");
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-////                doMySearch(query);
-//        }
 
 ////        Get the chem from the intent
 //        int chemNo = (Integer) getIntent().getExtras().get(EXTRA_CHEMNO);
@@ -100,20 +104,14 @@ public class ChemCompareActivity extends AppCompatActivity {
 //                new ChemCompareActivity.CheckPantryForChemTask().execute(chemNo);
 //                break;
 //            default:
-//                Log.d("ChemCompare", "Error, incoming class not found.");
+//                Log.d(TAG, "Error, incoming class not found.");
 //        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        // Get the intent, verify the action and get the query
-        intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            Log.d("ChemCompare", "Intent = ACTION_SEARCH");
-            String query = intent.getStringExtra(SearchManager.QUERY);
-//                doMySearch(query);
-        }
-        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
     }
 
     @Override
@@ -121,14 +119,14 @@ public class ChemCompareActivity extends AppCompatActivity {
         // Inflate the options menu from XML
         getMenuInflater().inflate(R.menu.options_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        Log.d("ChemResults-onCreateOpt", "searchManager = " + searchManager);
+        Log.d(TAG, "searchManager = " + searchManager);
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView sv = (SearchView) search.getActionView();
-        Log.d("Chem-onCreateOpt", "ActionView= " + sv);
+        Log.d(TAG, "ActionView= " + sv);
         // Get the SearchView and set the searchable configuration
         sv.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        Log.d("Chem-onCreateOpts", "getComponentName()= " + getComponentName());
-        Log.d("Chem-onCreateOpts", "sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
+        Log.d(TAG, "getComponentName()= " + getComponentName());
+        Log.d(TAG, "sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -142,13 +140,17 @@ public class ChemCompareActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onSearchRequested() {
-//        Bundle appData = new Bundle();
-//        appData.putBoolean(ChemCompareActivity., true);
-//        startSearch(null, false, false);
-//        return true;
-        return super.onSearchRequested();
+    private void handleIntent(Intent intent) {
+        // Get the intent, verify the action and get the query
+        Log.d(TAG, "Intent to handle = " + intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            Log.d(TAG, "Intent to handle = ACTION_SEARCH");
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d(TAG, "Search = " + query);
+//            Toast.makeText(getApplicationContext(), "Search = " + query, Toast.LENGTH_LONG).show();
+//                doMySearch(query);
+            new ChemRefLookupTask().execute(query);
+        }
     }
 
     /**
@@ -195,96 +197,168 @@ public class ChemCompareActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private class CheckPantryForChemTask extends AsyncTask<Integer, Void, Integer[]> {
+    private class CheckPantryForChemTask extends AsyncTask<String, Void, String[]> {
         @Override
-        protected Integer[] doInBackground(Integer... params) {
-            int chemId = params[0];
-            Integer[] chemInfo = {0, chemId};
+        protected String[] doInBackground(String... params) {
+            String chemId = params[0];
+            String[] chemInfo = {null, chemId};
             try {
                 SQLiteOpenHelper pantryDatabaseHelper =
                         new PantryDatabaseHelper(ChemCompareActivity.this);
                 db = pantryDatabaseHelper.getReadableDatabase();
                 Integer pantryId = PantryUtilities.getPantryIdIfExists(db, chemId);
                 if (pantryId > 0) {
-                    chemInfo[0] = pantryId;
+                    chemInfo[0] = pantryId.toString();
                     return chemInfo;
                 }
             } catch (SQLiteException e) {
-                Log.d("PantryChemResults: ", "Caught SQLite Exception" + e.getMessage());
+                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
             }
             return chemInfo;
         }
 
         @Override
-        protected void onPostExecute(Integer[] chemInfo) {
-            if (chemInfo[0] > 0) {
-                new ChemCompareActivity.PantryChemResultsTask().execute(chemInfo[0]);
+        protected void onPostExecute(String[] chemInfo) {
+            if (Integer.parseInt(chemInfo[0]) > 0) {
+                new ChemCompareActivity.PantryChemResultsTask().execute(Integer.parseInt(chemInfo[0]));
 //            } else {
 //                new ChemCompareActivity.SearchChemIDTask().execute(chemInfo[1]);
             }
         }
     }
 
-//    private class FetchBGGTask extends AsyncTask<Integer, Void, FetchItem> {
-//        @Override
-//        protected FetchItem doInBackground(Integer... params) {
-//            int chemId = params[0];
-//            try {
-//                FetchItem fetchedItem = BGG.fetch(Arrays.asList(chemId), ThingType.BOARDGAME,
-//                        ThingType.BOARDGAME_EXPANSION).iterator().next();
-//                return fetchedItem;
-//            } catch (FetchException e) {
-//                Log.d("FetchBGGTask", "Fetch Exception: " + e.getMessage());
-//                return null;
-//            }
+    private class ChemRefLookupTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String searchTerm = params[0];
+            try {
+                SQLiteOpenHelper chemRefDatabaseHelper =
+                        new ChemRefDatabaseHelper(ChemCompareActivity.this);
+                db = chemRefDatabaseHelper.getReadableDatabase();
+                return ChemRefUtilities.getChemId(db, searchTerm);
+            } catch (SQLiteException e) {
+                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String regNum) {
+
+            if (regNum != null) {
+                Log.d(TAG+" ChRfLkPost", "RegNum = " + regNum);
+                Toast.makeText(ChemCompareActivity.this, "Chem/CAS registry num = "
+                        + regNum, Toast.LENGTH_SHORT).show();
+                new ToxnetWebTask().execute(regNum);
+            } else {
+                Toast toast = Toast.makeText(ChemCompareActivity.this,
+                        "ERROR RETRIEVING CHEMID NUMBER", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+
+    private class ToxnetWebTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String toxnetUrl = "https://chem.nlm.nih.gov/chemidplus/rn/" + params[0];
+            String lethalDoseVal = "";
+
+            try {
+                Document doc = Jsoup.connect(toxnetUrl).get();
+                Log.d(TAG+" ToxTask", "Connected to: " + toxnetUrl);
+
+                //select the toxicity section
+                Elements toxicity = doc.select("div#toxicity");
+                Log.d(TAG, "Got Tox section");
+
+                //select the table
+                Elements table = toxicity.select("tbody");
+                Log.d(TAG, "Got table");
+
+                //select the rows in the table
+                Elements rows = table.select("tr");
+                Log.d(TAG, "Got rows");
+
+
+                for (int i = 0; i < rows.size(); i++) {
+                    Log.d(TAG, "Looping through row " + i);
+                    Element row = rows.get(i);
+                    Elements cols = row.select("td");
+                    if ((cols.get(1).text().equals("LD50")) && (cols.get(2).text().equals("oral")) &&
+                            (cols.get(0).text().equals("rat"))) {
+                        lethalDoseVal = cols.get(3).text();
+                        Log.d(TAG, "Added a valid value: " + lethalDoseVal + " at row: " + i);
+                    }
+                }
+
+                if (lethalDoseVal.length() != 0) {
+                    Log.d(TAG, "About to return value from JSoup: " + lethalDoseVal);
+                    return lethalDoseVal;
+                } else {
+                    for (int i = 0; i < rows.size(); i++) {
+                        Element row = rows.get(i);
+                        Elements cols = row.select("td");
+
+                        if ((cols.get(1).text().equals("LD50")) && (cols.get(2).text().equals("oral")) &&
+                                (cols.get(0).text().equals("mouse"))) {
+                            lethalDoseVal = cols.get(3).text();
+                        }
+
+                    }
+                    Log.d(TAG, "About to return value from JSoup: " + lethalDoseVal);
+                    return lethalDoseVal;
+                }
+            } catch (IOException e) {
+                Log.d(TAG, "Caught IO Exception" + e.getMessage());
+                Toast.makeText(ChemCompareActivity.this, "IO EXCEPTION: "
+                        + e.getMessage(), Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        }
+        /* TODO set up progress bar or spinny whatsit */
+//        protected void onProgressUpdate(Integer... progress) {
+//            setProgressPercent(progress[0]);
 //        }
-//
-//        @Override
-//        protected void onPostExecute(FetchItem fetchedItem) {
-//
-//            if (fetchedItem != null) {
-//                //Populate the chem image
-//                ImageView photo = (ImageView) findViewById(R.id.photo);
-//                chemImageUrl = HTTPS + fetchedItem.getImageUrl();
-//                Picasso.with(ChemCompareActivity.this).load(chemImageUrl).into(photo);
-//
-//                //Populate the chem name
-//                TextView name = (TextView) findViewById(R.id.chem_name);
-//                chemName = fetchedItem.getName();
-//                name.setText(chemName);
-//
-//                //Populate the chem description
-//                TextView description = (TextView) findViewById(R.id.description);
-//                chemDescription = XmlEscape.unescapeXml(fetchedItem.getDescription());
-//                chemDescription = HtmlEscape.unescapeHtml(chemDescription);
-//                description.setText(chemDescription);
-//
-//                //Populate the chem theme
-//                TextView theme = (TextView) findViewById(R.id.theme);
-//                List<String> themeList = fetchedItem.getCategories();
-//                chemThemes = join(", ", themeList);
-//                theme.setText(chemThemes);
-//
-//            } else {
-//                Toast toast = Toast.makeText(ChemCompareActivity.this,
-//                        ERROR_RETRIEVE_GAME, Toast.LENGTH_SHORT);
-//                toast.show();
-//            }
-//        }
-//    }
+
+
+        @Override
+        protected void onPostExecute(String ld50Text) {
+
+            if (ld50Text != null) {
+                Log.d(TAG, "LD50 = " + ld50Text);
+                String ld50Val = StringUtils.substringBetween(ld50Text, "(", ")");
+                Log.d(TAG, "Grabbed substring btwn parens: " + ld50Val);
+                ld50Val = ld50Val.substring(0, ld50Val.indexOf("m"));
+                Log.d(TAG, "Removed mg/kg: " + ld50Val);
+                try {
+                    Log.d(TAG, "LD50 retrieved: " + Integer.parseInt(ld50Val));
+                    Toast.makeText(ChemCompareActivity.this, "LD50 NUMBER FOUND: "
+                            + Integer.parseInt(ld50Val), Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e){
+                    Log.d(TAG, "Caught error: " + e.getMessage());
+                }
+            } else {
+                Log.d(TAG, "NO LD50 NUMBER FOUND!");
+                Toast.makeText(ChemCompareActivity.this,
+                        "NO LD50 NUMBER FOUND!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
     private class PantryChemResultsTask extends AsyncTask<Integer, Void, Chem> {
         @Override
         protected Chem doInBackground(Integer... params) {
             int chemId = params[0];
-
             try {
                 SQLiteOpenHelper pantryDatabaseHelper =
                         new PantryDatabaseHelper(ChemCompareActivity.this);
                 db = pantryDatabaseHelper.getReadableDatabase();
                 return PantryUtilities.getChem(db, chemId);
             } catch (SQLiteException e) {
-                Log.d("PantryChemResults: ", "Caught SQLite Exception" + e.getMessage());
+                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
                 return null;
             }
         }
@@ -329,7 +403,7 @@ public class ChemCompareActivity extends AppCompatActivity {
 //                db.close();
 //                return true;
 //            } catch (SQLiteException e) {
-//                Log.d("ChemCompareActivity", "SQLite Exception caught");
+//                Log.d(TAG, "SQLite Exception caught");
 //                return false;
 //            }
 //        }
@@ -357,7 +431,7 @@ public class ChemCompareActivity extends AppCompatActivity {
 //                db.close();
 //                return chemId;
 //            } catch (SQLiteException e) {
-//                Log.d("ChemCompareActivity", "SQLite Exception caught while removing chem from db");
+//                Log.d(TAG, "SQLite Exception caught while removing chem from db");
 //                return null;
 //            }
 //        }

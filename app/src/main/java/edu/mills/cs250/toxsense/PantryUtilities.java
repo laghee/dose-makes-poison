@@ -79,11 +79,14 @@ public class PantryUtilities {
          * @param chemid the ChemID database number
          * @return the pantry id
          */
-        public static int getPantryIdIfExists(SQLiteDatabase db, int chemid) {
+        public static int getPantryIdIfExists(SQLiteDatabase db, String chemid) {
 
             int pantryId = -1;
-            Cursor cursor = db.rawQuery("SELECT _id FROM " + PANTRY_TABLE + " WHERE " + CHEMID_COL +
-                    " = " + chemid + " LIMIT 1", null);
+            Cursor cursor = db.query(PANTRY_TABLE,
+                    new String[]{"_id"},
+                    CHEMID_COL + " = ?",
+                    new String[]{chemid},
+                    null, null, null);
             if (cursor.moveToFirst()) {
                 pantryId = cursor.getInt(0);
             }

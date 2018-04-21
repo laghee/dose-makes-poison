@@ -27,20 +27,20 @@ public class ChemRefDatabaseHelper extends SQLiteOpenHelper {
     /**
      * Name of database table keeping track of all saved chemicals in personal pantry.
      */
-    static final String CHEMREF_TABLE = "CHEMREF";
+    static final String CHEMREF_TABLE = "chemref";
 
     /**
      * Name of column in {@link #CHEMREF_TABLE} with name of chemical.
      */
-    static final String NAME_COL = "NAME";
+    static final String NAME_COL = "name";
 
     /**
      * Name of column in {@link #CHEMREF_TABLE} with CAS Registry number.
      */
-    static final String CHEMID_COL = "CHEMID";
+    static final String CHEMID_COL = "regnum";
 
 
-    private static final String DB_NAME = "chem_ref_db"; // the name of our database
+    private static final String DB_NAME = "toxsenseDB"; // the name of our database
     private static final int DB_VERSION = 1; // the version of the database
 
     private boolean createDb = false;
@@ -72,11 +72,11 @@ public class ChemRefDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void copyDatabaseFromAssets(SQLiteDatabase db) {
-        Log.d(TAG, "copy DB");
+        Log.d(TAG, "About to copy DB");
         InputStream dbInput = null;
         OutputStream dbOutput = null;
         try {
-            dbInput = context.getAssets().open("databases/toxsense_db.sql");
+            dbInput = context.getAssets().open("databases/toxsenseDB");
             dbOutput = new FileOutputStream(db.getPath());
             byte[] buffer = new byte[1024];
             int length;
@@ -88,10 +88,9 @@ public class ChemRefDatabaseHelper extends SQLiteOpenHelper {
             SQLiteDatabase copiedDb = context.openOrCreateDatabase(DB_NAME, 0, null);
             copiedDb.execSQL("PRAGMA user_version = " + DB_VERSION);
             copiedDb.close();
-
+            Log.d(TAG, "DB successfully copied (or at least stepped thru)");
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new Error(TAG + " Error copying database");
+            throw new Error(TAG + " Error copying database" + e.getMessage());
         } finally {
             try {
                 if (dbOutput != null) {
@@ -101,8 +100,7 @@ public class ChemRefDatabaseHelper extends SQLiteOpenHelper {
                     dbInput.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new Error(TAG + " Error closing streams");
+                throw new Error(TAG + " Error closing streams" + e.getMessage());
             }
         }
     }

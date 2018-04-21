@@ -9,6 +9,7 @@ package edu.mills.cs250.toxsense;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import static edu.mills.cs250.toxsense.ChemRefDatabaseHelper.CHEMID_COL;
 import static edu.mills.cs250.toxsense.ChemRefDatabaseHelper.CHEMREF_TABLE;
 import static edu.mills.cs250.toxsense.PantryDatabaseHelper.NAME_COL;
 
@@ -26,8 +27,11 @@ public class ChemRefUtilities {
         public static String getChemId(SQLiteDatabase db, String name) {
 
             String chemId = "";
-            Cursor cursor = db.rawQuery("SELECT regNum FROM " + CHEMREF_TABLE + " WHERE " +
-                    NAME_COL + " = " + name + " LIMIT 1", null);
+            Cursor cursor = db.query(CHEMREF_TABLE,
+                    new String[]{CHEMID_COL},
+            NAME_COL + " = ?",
+                    new String[]{name},
+            null, null, null);
             if (cursor.moveToFirst()) {
                 chemId = cursor.getString(0);
             }
