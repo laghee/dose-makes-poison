@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context="edu.mills.cs250.toxsense.MainActivity">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/main_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/main_title" >
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/searchButton"
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -43,7 +43,7 @@
             android:tint="@color/secondaryColor" />
 
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/pantryButton"
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -59,7 +59,7 @@
             android:tint="@color/secondaryColor" />
 
 
-        <ImageButton
+        <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/learnButton"
             android:layout_width="128dp"
             android:layout_height="128dp"
@@ -77,12 +77,3 @@
     </FrameLayout>
 
 </RelativeLayout>
-
-    <!--<android.support.v7.widget.AppCompatTextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="10dp"-->
-    <!--android:layout_above="@id/frameLayout"-->
-    <!--android:textAllCaps="@string/app_label"-->
-    <!--android:textColor="@color/secondaryColor"-->
-    <!--android:textSize="40sp"-->
-    <!--/>-->

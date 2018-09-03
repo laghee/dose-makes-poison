@@ -147,8 +147,6 @@ public class PantryActivity extends AppCompatActivity {
                 TextView emptyPantry = findViewById(R.id.empty);
                 emptyPantry.setVisibility(View.VISIBLE);
                 emptyPantry.bringToFront();
-                Toast toast = Toast.makeText(PantryActivity.this, PANTRY_IS_EMPTY, Toast.LENGTH_LONG);
-                toast.show();
             }
         }
     }
