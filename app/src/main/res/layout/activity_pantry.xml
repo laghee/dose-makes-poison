@@ -18,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:drawSelectorOnTop="false"/>
-
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

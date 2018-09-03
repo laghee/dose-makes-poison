@@ -11,25 +11,180 @@
         android:id="@+id/tox_toolbar"
         layout="@layout/tox_toolbar" />
 
-    <FrameLayout
-        android:id="@+id/compare_frag"
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textview_firstsearch"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:elevation="4dp"
+        android:textSize="30sp"
+        android:text="@string/how_to_search"
+        android:textColor="@color/textColorPrimary" />
+
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/framelayout_chemcomparefab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/relativelayout_comparebody"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textview_chemname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="16dp"
+                android:text="@string/chem_name"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/secondaryColor"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <ToggleButton
+                android:id="@+id/button_addtopantry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_chemname"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/primaryDarkColor"
+                android:checked="false"
+                android:textColor="@color/textColorPrimary"
+                android:textOff="ADD"
+                android:textOn="REMOVE"
+                android:tint="@color/secondaryColor" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textview_chemcompare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/button_addtopantry"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@+id/gridlayout_toxscale"
+                android:text="@string/dummy_content"
+                android:textAlignment="center"
+                android:textColor="@color/textColorPrimary" />
+
+
+            <GridLayout
+                android:id="@+id/gridlayout_toxscale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_centerVertical="true"
+                android:columnCount="7"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_water"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/water"
+                    android:gravity="center_horizontal"
+                    android:text="WATER"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_sugar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/sugar"
+                    android:gravity="center_horizontal"
+                    android:text="SUGAR"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_alcohol"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/alcohol"
+                    android:gravity="center_horizontal"
+                    android:text="ALCOHOL"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_salt"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/salt"
+                    android:gravity="center_horizontal"
+                    android:text="SALT"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_caffeine"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/caffeine"
+                    android:gravity="center_horizontal"
+                    android:text="CAFFEINE"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_arsenic"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/arsenic"
+                    android:gravity="center_horizontal"
+                    android:text="ARSENIC"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_cyanide"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/cyanide"
+                    android:gravity="center_horizontal"
+                    android:text="CYANIDE"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </GridLayout>
+
+        </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:src="?android:attr/actionModeShareDrawable"
             android:tint="@color/textColorPrimary"
             app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
-            app:backgroundTint="@color/secondaryColor"
             app:elevation="16dp"
-            app:rippleColor="@color/textColorPrimary" />
-
+            app:rippleColor="@color/primaryDarkColor"
+            app:srcCompat="@android:drawable/ic_menu_share" />
     </FrameLayout>
 
 </FrameLayout>

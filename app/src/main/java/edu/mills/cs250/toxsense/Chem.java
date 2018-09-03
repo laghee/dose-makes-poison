@@ -139,22 +139,4 @@ public class Chem {
         this.spectrumNum = spectrumNum;
     }
 
-    /**
-     * Gets the database.
-     *
-     * @return the SQLite database
-     */
-    public SQLiteDatabase getDb() {
-        return db;
-    }
-
-    /**
-     * Sets the database.
-     *
-     * @param db the SQLite database
-     */
-    public void setDb(SQLiteDatabase db) {
-        this.db = db;
-    }
-
 }

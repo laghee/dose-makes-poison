@@ -14,7 +14,13 @@
         <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:windowBackground">@color/colorBackground</item>
     </style>
+    
+    <style name="CustomToolbarTitle">
+        <item name="android:textSize">30sp</item>
+        <item name="android:paddingLeft">25dp</item>
+        <item name="android:textColor">@color/secondaryDarkColorGREY</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:fontFamily">cursive</item>
+    </style>
 
 </resources>
-
-    <!--<item name="android:windowActionBarOverlay">true</item>-->
