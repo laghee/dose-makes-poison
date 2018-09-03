@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/framelayout_compare"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryLightColor"
@@ -180,11 +181,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:tint="@color/textColorPrimary"
+            android:visibility="gone"
+            app:srcCompat="@android:drawable/ic_menu_share"
             app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
-            app:elevation="16dp"
-            app:rippleColor="@color/primaryDarkColor"
-            app:srcCompat="@android:drawable/ic_menu_share" />
+            app:elevation="20dp"
+            app:rippleColor="@color/primaryDarkColor" />
     </FrameLayout>
 
 </FrameLayout>

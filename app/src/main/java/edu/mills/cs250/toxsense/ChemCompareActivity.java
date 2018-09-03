@@ -6,16 +6,19 @@
  */
 package edu.mills.cs250.toxsense;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +37,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+
+
 
 /**
  * Activity for viewing ingredient comparison. Provides an interface for adding or removing ingredients
@@ -71,6 +78,7 @@ public class ChemCompareActivity extends AppCompatActivity {
     private int ld50Val;
     private String compareChem;
     private int spNum;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -81,6 +89,7 @@ public class ChemCompareActivity extends AppCompatActivity {
         setSupportActionBar(toxTool);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        fab = findViewById(R.id.fab);
         if (savedInstanceState != null && savedInstanceState.getBoolean("searchPerformed")) {
             chemName = savedInstanceState.getString("name");
             chemId = savedInstanceState.getString("id");
@@ -97,9 +106,36 @@ public class ChemCompareActivity extends AppCompatActivity {
                 toxLayout.setOrientation(GridLayout.HORIZONTAL);
             }
             findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
+            fab.show();
         } else {
             handleIntent(getIntent());
+            fab.show();
         }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view,"You'd like to share this ingredient! Yay!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                View chemView = findViewById(R.id.framelayout_compare);
+                chemView.setDrawingCacheEnabled(true);
+                Bitmap screen = chemView.getDrawingCache();
+                FileOutputStream output;
+                try {
+                    output = openFileOutput("toxinfo.png", Context.MODE_PRIVATE);
+                    screen.compress(Bitmap.CompressFormat.PNG, 100, output);
+                    output.close();
+                } catch (IOException e) {
+                    Snackbar.make(chemView, "Ooops! Problem capturing your screen!", Snackbar.LENGTH_LONG);
+                }
+                File pngFile = new File(getApplicationContext().getFilesDir(), "toxinfo.png");
+                Uri uriToImage = FileProvider.getUriForFile(getApplicationContext(), "edu.mills.cs250.toxsense.fileprovider", pngFile);
+                Intent shareInfo = new Intent(Intent.ACTION_SEND);
+                shareInfo.putExtra(Intent.EXTRA_STREAM, uriToImage);
+                shareInfo.setType("image/png");
+                shareInfo.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(shareInfo, getResources().getText(R.string.share_info)));
+            }
+        });
 
 
 ////        Get the chem from the intent
@@ -157,6 +193,7 @@ public class ChemCompareActivity extends AppCompatActivity {
             new ChemRefLookupTask().execute(query);
         }
     }
+
 
 
 //    /**
@@ -350,7 +387,8 @@ public class ChemCompareActivity extends AppCompatActivity {
                     explanation.setText("The Lethal Median Dose for " + chemName + " (" + chemId + ") is: "
                             + ld50Val + " mg/kg.");
                     findViewById(R.id.textview_firstsearch).setVisibility(View.GONE);
-                    findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);                } catch (NumberFormatException e) {
+                    findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
+                } catch (NumberFormatException e) {
                     Log.d(TAG, "Caught error: " + e.getMessage());
                 }
             } else {

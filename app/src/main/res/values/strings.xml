@@ -9,6 +9,7 @@
     <string name="how_to_search">Enter an ingredient above (from a food package or any other source) to search for information on its relative toxicity.</string>
     <string name="search_hint">Search ingredients</string>
     <string name="search_button">Ingredient Search</string>
+    <string name="share_info">"Share tox info"</string>
     <string name="pantry_button">What\'s In My Pantry</string>
     <string name="pantry_add">Add to Your Pantry</string>
     <string name="learn_button">Learn More About Toxicity</string>
