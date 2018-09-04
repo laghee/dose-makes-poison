@@ -38,9 +38,9 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
     static final String COMPARE_COL = "DESCRIPTION";
 
     /**
-     * Name of column in {@link #PANTRY_TABLE} with chemical spectrum block number.
+     * Name of column in {@link #PANTRY_TABLE} with chemical spectrum box view ID number.
      */
-    static final String SPNUM_COL = "SPNUM";
+    static final String VIEWID_COL = "VIEWID";
 
     /**
      * A local SQLite database for inserting into and deleting chemicals from a local pantry.
@@ -70,7 +70,7 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
                     + CHEMID_COL + " TEXT NOT NULL, "
                     + LD50_COL + " INTEGER NOT NULL, "
                     + COMPARE_COL + " TEXT NOT NULL, "
-                    + SPNUM_COL + " INTEGER NOT NULL);");
+                    + VIEWID_COL + " INTEGER NOT NULL);");
         }
     }
 }
