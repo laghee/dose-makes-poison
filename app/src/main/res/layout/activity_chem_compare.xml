@@ -35,7 +35,7 @@
         <RelativeLayout
             android:id="@+id/relativelayout_comparebody"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="530dp"
             android:layout_marginTop="70dp">
 
             <android.support.v7.widget.AppCompatTextView
@@ -83,8 +83,8 @@
                 android:id="@+id/gridlayout_toxscale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:layout_centerVertical="true"
+                android:layout_margin="16dp"
                 android:columnCount="7"
                 android:orientation="vertical">
 
@@ -172,7 +172,6 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
             </GridLayout>
-
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -181,11 +180,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:visibility="gone"
-            app:srcCompat="@android:drawable/ic_menu_share"
             app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
             app:elevation="20dp"
-            app:rippleColor="@color/primaryDarkColor" />
+            app:rippleColor="@color/primaryDarkColor"
+            app:srcCompat="@android:drawable/ic_menu_share"
+            android:visibility="gone" />
     </FrameLayout>
 
 </FrameLayout>
+
+    <!-- FAB THING && framelayout_chemcomparefab android:visibility="gone"-->

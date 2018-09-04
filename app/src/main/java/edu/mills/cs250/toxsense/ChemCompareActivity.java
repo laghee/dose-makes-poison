@@ -23,12 +23,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +41,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,6 +76,8 @@ public class ChemCompareActivity extends AppCompatActivity {
     private static final String ERROR_SAVING_CHEM = "Error saving chem.";
     private static final String CHEM_SAVED = "Chem saved!";
     private static final String CHEM_REMOVED = "Chem removed.";
+    // The LD50 values for water, sugar, alcohol, salt, caffeine, arsenic, and cyanide, respectively
+    private static final int [] TOX_SPECTRUM = {90000, 30000, 7060, 3000, 200, 15, 5};
 
     private boolean web = true;
     private SQLiteDatabase db;
@@ -77,7 +85,7 @@ public class ChemCompareActivity extends AppCompatActivity {
     private String chemId;
     private int ld50Val;
     private String compareChem;
-    private int spNum;
+    private int spectrumNum;
     private FloatingActionButton fab;
 
 
@@ -94,16 +102,20 @@ public class ChemCompareActivity extends AppCompatActivity {
             chemName = savedInstanceState.getString("name");
             chemId = savedInstanceState.getString("id");
             ld50Val = savedInstanceState.getInt("LD50");
+            compareChem = savedInstanceState.getString("comparison");
+            spectrumNum = savedInstanceState.getInt("position");
             TextView name = findViewById(R.id.textview_chemname);
             name.setText(chemName);
             TextView explanation = findViewById(R.id.textview_chemcompare);
             explanation.setText("The Lethal Median Dose for " + chemName + " (" + chemId + ") is: "
                     + ld50Val + " mg/kg.");
+            int spectrumPosition = getToxComparisonViewId(spectrumNum);
+            TextView compareView = findViewById(spectrumPosition);
+            compareView.setForeground(getResources().getDrawable(R.drawable.black_dot, null));
+            compareView.setForegroundGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
             findViewById(R.id.textview_firstsearch).setVisibility(View.GONE);
-            int format = getApplicationContext().getResources().getConfiguration().orientation;
-            if (format == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-                GridLayout toxLayout = findViewById(R.id.gridlayout_toxscale);
-                toxLayout.setOrientation(GridLayout.HORIZONTAL);
+            if (isLandscapeMode(getApplicationContext())) {
+                handleLandscapeOrientation(explanation);
             }
             findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
             fab.show();
@@ -194,6 +206,80 @@ public class ChemCompareActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isLandscapeMode(Context context) {
+        if (context.getResources().getConfiguration().orientation ==
+                android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+            return true;
+        }
+        return false;
+    }
+
+    private void handleLandscapeOrientation(TextView explanation) {
+        GridLayout spectrum = findViewById(R.id.gridlayout_toxscale);
+        spectrum.setOrientation(GridLayout.HORIZONTAL);
+        RelativeLayout.LayoutParams explanationLp = (RelativeLayout.LayoutParams) explanation.getLayoutParams();
+        explanationLp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        explanationLp.removeRule(RelativeLayout.END_OF);
+        explanation.setLayoutParams(explanationLp);
+        RelativeLayout.LayoutParams spectrumLp = (RelativeLayout.LayoutParams) spectrum.getLayoutParams();
+        spectrumLp.addRule(RelativeLayout.BELOW, R.id.textview_chemcompare);
+        spectrumLp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        spectrum.setLayoutParams(spectrumLp);
+    }
+
+    private int[] getToxComparison(int ld50) {
+        int moreToxic = -1;
+        int lessToxic = 0;
+        int lessDiff = -1;
+        int moreDiff = -1;
+        int toxDiff;
+        int closestTox;
+        for (int i = 0; moreToxic < 0; i++) {
+            if (ld50 < TOX_SPECTRUM[i]) {
+                lessToxic = i;
+                lessDiff = TOX_SPECTRUM[i] - ld50;
+            } else {
+                moreToxic = i;
+                moreDiff = ld50 - TOX_SPECTRUM[i];
+            }
+        }
+        if (lessDiff < moreDiff) {
+            toxDiff = lessDiff;
+            closestTox = lessToxic;
+        } else {
+            toxDiff = moreDiff;
+            if (lessDiff != moreDiff) {
+                closestTox = moreToxic;
+            } else {
+                closestTox = TOX_SPECTRUM.length;
+            }
+        }
+        int [] result = {lessToxic, moreToxic, toxDiff, closestTox};
+        return result;
+    }
+
+    private int getToxComparisonViewId(int spectrumIndex) {
+        int toxView;
+        switch (spectrumIndex) {
+            case 0: toxView = R.id.textview_water;
+                    break;
+            case 1: toxView = R.id.textview_sugar;
+                    break;
+            case 2: toxView = R.id.textview_alcohol;
+                    break;
+            case 3: toxView = R.id.textview_salt;
+                    break;
+            case 4: toxView = R.id.textview_caffeine;
+                    break;
+            case 5: toxView = R.id.textview_arsenic;
+                    break;
+            case 6: toxView = R.id.textview_cyanide;
+                    break;
+                    default: toxView = -1;
+        }
+        return toxView;
+    }
+
 
 
 //    /**
@@ -222,6 +308,8 @@ public class ChemCompareActivity extends AppCompatActivity {
         savedInstanceInfo.putString("name", chemName);
         savedInstanceInfo.putString("id", chemId);
         savedInstanceInfo.putInt("LD50", ld50Val);
+        savedInstanceInfo.putString("comparison", compareChem);
+        savedInstanceInfo.putInt("position", spectrumNum);
         Boolean searchPerformed = false;
         if (findViewById(R.id.textview_firstsearch).getVisibility() == View.GONE) {
             searchPerformed = true;
@@ -240,36 +328,6 @@ public class ChemCompareActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    private class CheckPantryForChemTask extends AsyncTask<String, Void, String[]> {
-        @Override
-        protected String[] doInBackground(String... params) {
-            String casNum = params[0];
-            String[] chemInfo = {null, casNum};
-            try {
-                SQLiteOpenHelper pantryDatabaseHelper =
-                        new PantryDatabaseHelper(ChemCompareActivity.this);
-                db = pantryDatabaseHelper.getReadableDatabase();
-                Integer pantryId = PantryUtilities.getPantryIdIfExists(db, casNum);
-                if (pantryId > 0) {
-                    chemInfo[0] = pantryId.toString();
-                    return chemInfo;
-                }
-            } catch (SQLiteException e) {
-                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
-            }
-            return chemInfo;
-        }
-
-        @Override
-        protected void onPostExecute(String[] chemInfo) {
-            if (Integer.parseInt(chemInfo[0]) > 0) {
-                new ChemCompareActivity.PantryChemResultsTask().execute(Integer.parseInt(chemInfo[0]));
-//            } else {
-//                new ChemCompareActivity.SearchChemIDTask().execute(chemInfo[1]);
-            }
-        }
     }
 
     private class ChemRefLookupTask extends AsyncTask<String, Void, String> {
@@ -311,20 +369,15 @@ public class ChemCompareActivity extends AppCompatActivity {
 
             try {
                 Document doc = Jsoup.connect(toxnetUrl).get();
-                Log.d(TAG + " ToxTask", "Connected to: " + toxnetUrl);
-
                 //select the toxicity section
                 Elements toxicity = doc.select("div#toxicity");
                 Log.d(TAG, "Got Tox section");
-
                 //select the table
                 Elements table = toxicity.select("tbody");
                 Log.d(TAG, "Got table");
-
                 //select the rows in the table
                 Elements rows = table.select("tr");
                 Log.d(TAG, "Got rows");
-
 
                 for (int i = 0; i < rows.size(); i++) {
                     Log.d(TAG, "Looping through row " + i);
@@ -338,7 +391,6 @@ public class ChemCompareActivity extends AppCompatActivity {
                 }
 
                 if (lethalDoseVal.length() != 0) {
-                    Log.d(TAG, "About to return value from JSoup: " + lethalDoseVal);
                     return lethalDoseVal;
                 } else {
                     for (int i = 0; i < rows.size(); i++) {
@@ -349,9 +401,7 @@ public class ChemCompareActivity extends AppCompatActivity {
                                 (cols.get(0).text().equals("mouse"))) {
                             lethalDoseVal = cols.get(3).text();
                         }
-
                     }
-                    Log.d(TAG, "About to return value from JSoup: " + lethalDoseVal);
                     return lethalDoseVal;
                 }
             } catch (IOException e) {
@@ -370,14 +420,10 @@ public class ChemCompareActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String ld50Text) {
 
-            if (ld50Text != null) {
-                Log.d(TAG, "LD50 = " + ld50Text);
+            if ((ld50Text !=  null) && (!ld50Text.equals(""))) {
                 String medLethalDose = StringUtils.substringBetween(ld50Text, "(", ")");
-                Log.d(TAG, "Grabbed substring btwn parens: '" + StringEscapeUtils.escapeJava(medLethalDose) + "'");
                 medLethalDose = StringUtils.removeEnd(medLethalDose, "mg/kg");
-                Log.d(TAG, "Removed mg/kg: " + medLethalDose);
                 medLethalDose = StringUtils.removeEndIgnoreCase(medLethalDose, "ml/kg");
-                Log.d(TAG, "Removed ml/kg: " + medLethalDose);
                 try {
                     ld50Val = Integer.parseInt(medLethalDose);
                     Log.d(TAG, "LD50 retrieved: " + ld50Val);
@@ -386,6 +432,15 @@ public class ChemCompareActivity extends AppCompatActivity {
                     TextView explanation = findViewById(R.id.textview_chemcompare);
                     explanation.setText("The Lethal Median Dose for " + chemName + " (" + chemId + ") is: "
                             + ld50Val + " mg/kg.");
+                    if (isLandscapeMode(getApplicationContext())) {
+                        handleLandscapeOrientation(explanation);
+                    }
+                    int[] comparisonData = getToxComparison(ld50Val);
+                    spectrumNum = comparisonData[3];
+                    int viewId = getToxComparisonViewId(spectrumNum);
+                    TextView compareView = findViewById(viewId);
+                    compareView.setForeground(getResources().getDrawable(R.drawable.black_dot, null));
+                    compareView.setForegroundGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
                     findViewById(R.id.textview_firstsearch).setVisibility(View.GONE);
                     findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
                 } catch (NumberFormatException e) {
@@ -394,26 +449,55 @@ public class ChemCompareActivity extends AppCompatActivity {
             } else {
                 Log.d(TAG, "NO LD50 NUMBER FOUND!");
                 Toast.makeText(ChemCompareActivity.this,
-                        "NO LD50 NUMBER FOUND!", Toast.LENGTH_SHORT).show();
+                        "NO TOXICITY VALUE FOUND ON TOXNET!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    //    private class CheckPantryForChemTask extends AsyncTask<String, Void, String[]> {
+//        @Override
+//        protected String[] doInBackground(String... params) {
+//            String casNum = params[0];
+//            String[] chemInfo = {null, casNum};
+//            try {
+//                SQLiteOpenHelper pantryDatabaseHelper =
+//                        new PantryDatabaseHelper(ChemCompareActivity.this);
+//                db = pantryDatabaseHelper.getReadableDatabase();
+//                Integer pantryId = PantryUtilities.getPantryIdIfExists(db, casNum);
+//                if (pantryId > 0) {
+//                    chemInfo[0] = pantryId.toString();
+//                    return chemInfo;
+//                }
+//            } catch (SQLiteException e) {
+//                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
+//            }
+//            return chemInfo;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String[] chemInfo) {
+//            if (Integer.parseInt(chemInfo[0]) > 0) {
+//                new PantryChemResultsTask().execute(Integer.parseInt(chemInfo[0]));
+//            } else {
+//                new SearchChemIDTask().execute(chemInfo[1]);
+//            }
+//        }
+//    }
 
-    private class PantryChemResultsTask extends AsyncTask<Integer, Void, Chem> {
-        @Override
-        protected Chem doInBackground(Integer... params) {
-            int rowId = params[0];
-            try {
-                SQLiteOpenHelper pantryDatabaseHelper =
-                        new PantryDatabaseHelper(ChemCompareActivity.this);
-                db = pantryDatabaseHelper.getReadableDatabase();
-                return PantryUtilities.getChem(db, rowId);
-            } catch (SQLiteException e) {
-                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
-                return null;
-            }
-        }
+//    private class PantryChemResultsTask extends AsyncTask<Integer, Void, Chem> {
+//        @Override
+//        protected Chem doInBackground(Integer... params) {
+//            int rowId = params[0];
+//            try {
+//                SQLiteOpenHelper pantryDatabaseHelper =
+//                        new PantryDatabaseHelper(ChemCompareActivity.this);
+//                db = pantryDatabaseHelper.getReadableDatabase();
+//                return PantryUtilities.getChem(db, rowId);
+//            } catch (SQLiteException e) {
+//                Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
+//                return null;
+//            }
+//        }
 //
 //        @Override
 //        protected void onPostExecute(Chem chem) {
@@ -506,5 +590,5 @@ public class ChemCompareActivity extends AppCompatActivity {
 //            }
 //        }
 //    }
-    }
+
 }
