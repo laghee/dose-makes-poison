@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -76,6 +77,19 @@ public class ChemCompareActivity extends AppCompatActivity {
     private static final String ERROR_SAVING_CHEM = "Error saving chem.";
     private static final String CHEM_SAVED = "Chem saved!";
     private static final String CHEM_REMOVED = "Chem removed.";
+    private static final String WATER = "water";
+    private static final String SUGAR = "sugar";
+    private static final String ALCOHOL = "alcohol";
+    private static final String SALT = "salt";
+    private static final String CAFFEINE = "caffeine";
+    private static final String ARSENIC = "arsenic";
+    private static final String CYANIDE = "cyanide";
+    private static final String BETWEEN = "between";
+    private static final String COMPARISON_VIEW_ID = "viewId";
+    private static final String COMPARISON_CHEM = "comparisonName";
+    private static final String OPTIONAL_EXTRA_CHEM = "secondName";
+    private static final String IS_MORE_TOXIC = "moreTox";
+    private static final String TOX_DIFFERENCE = "ld50Diff";
     // The LD50 values for water, sugar, alcohol, salt, caffeine, arsenic, and cyanide, respectively
     private static final int [] TOX_SPECTRUM = {90000, 30000, 7060, 3000, 200, 15, 5};
 
@@ -104,24 +118,9 @@ public class ChemCompareActivity extends AppCompatActivity {
             ld50Val = savedInstanceState.getInt("LD50");
             compareChem = savedInstanceState.getString("comparison");
             spectrumNum = savedInstanceState.getInt("position");
-            TextView name = findViewById(R.id.textview_chemname);
-            name.setText(chemName);
-            TextView explanation = findViewById(R.id.textview_chemcompare);
-            explanation.setText("The Lethal Median Dose for " + chemName + " (" + chemId + ") is: "
-                    + ld50Val + " mg/kg.");
-            int spectrumPosition = getToxComparisonViewId(spectrumNum);
-            TextView compareView = findViewById(spectrumPosition);
-            compareView.setForeground(getResources().getDrawable(R.drawable.black_dot, null));
-            compareView.setForegroundGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-            findViewById(R.id.textview_firstsearch).setVisibility(View.GONE);
-            if (isLandscapeMode(getApplicationContext())) {
-                handleLandscapeOrientation(explanation);
-            }
-            findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
-            fab.show();
+            displaySearchResults();
         } else {
             handleIntent(getIntent());
-            fab.show();
         }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,14 +206,15 @@ public class ChemCompareActivity extends AppCompatActivity {
     }
 
     private boolean isLandscapeMode(Context context) {
-        if (context.getResources().getConfiguration().orientation ==
-                android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-            return true;
-        }
-        return false;
+        return context.getResources().getConfiguration().orientation ==
+                android.content.res.Configuration.ORIENTATION_LANDSCAPE;
     }
 
     private void handleLandscapeOrientation(TextView explanation) {
+        RelativeLayout body = findViewById(R.id.relativelayout_comparebody);
+        FrameLayout.LayoutParams bodyLp = (FrameLayout.LayoutParams) body.getLayoutParams();
+        bodyLp.setMargins(0, 130, 0 ,0);
+        body.setLayoutParams(bodyLp);
         GridLayout spectrum = findViewById(R.id.gridlayout_toxscale);
         spectrum.setOrientation(GridLayout.HORIZONTAL);
         RelativeLayout.LayoutParams explanationLp = (RelativeLayout.LayoutParams) explanation.getLayoutParams();
@@ -227,59 +227,118 @@ public class ChemCompareActivity extends AppCompatActivity {
         spectrum.setLayoutParams(spectrumLp);
     }
 
-    private int[] getToxComparison(int ld50) {
-        int moreToxic = -1;
-        int lessToxic = 0;
-        int lessDiff = -1;
-        int moreDiff = -1;
-        int toxDiff;
-        int closestTox;
-        for (int i = 0; moreToxic < 0; i++) {
-            if (ld50 < TOX_SPECTRUM[i]) {
-                lessToxic = i;
-                lessDiff = TOX_SPECTRUM[i] - ld50;
-            } else {
-                moreToxic = i;
-                moreDiff = ld50 - TOX_SPECTRUM[i];
-            }
-        }
-        if (lessDiff < moreDiff) {
-            toxDiff = lessDiff;
-            closestTox = lessToxic;
+    private void displaySearchResults() {
+        TextView name = findViewById(R.id.textview_chemname);
+        name.setText(chemName);
+        Bundle toxComparisonResults = getToxComparisonResults(ld50Val);
+        compareChem = toxComparisonResults.getString(COMPARISON_CHEM);
+        TextView explanation = findViewById(R.id.textview_chemcompare);
+        String explanationText;
+        if (!toxComparisonResults.getString(OPTIONAL_EXTRA_CHEM).equals("")) {
+            String secondCompareChem = toxComparisonResults.getString(OPTIONAL_EXTRA_CHEM);
+            explanationText = String.format(getString(R.string.between_values), chemName, ld50Val, compareChem, secondCompareChem);
         } else {
-            toxDiff = moreDiff;
-            if (lessDiff != moreDiff) {
-                closestTox = moreToxic;
+            explanationText = String.format(getString(R.string.comparison_text), chemName, ld50Val, compareChem);
+        }
+        explanationText = explanationText.concat(getString(R.string.results_disclaimer));
+        explanation.setText(explanationText);
+        if (isLandscapeMode(getApplicationContext())) {
+            handleLandscapeOrientation(explanation);
+        }
+        TextView compareView = findViewById(toxComparisonResults.getInt(COMPARISON_VIEW_ID));
+        compareView.setForeground(getResources().getDrawable(R.drawable.black_dot, null));
+        compareView.setForegroundGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+        findViewById(R.id.textview_firstsearch).setVisibility(View.GONE);
+        findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
+        fab.show();
+    }
+
+    private Bundle getToxComparisonResults(int ld50) {
+        Bundle toxComparisonResults = new Bundle(5);
+        int upperChemIndex = -1;
+        int lowerChemIndex = -1;
+        int lowDiff = -1;
+        int highDiff = -1;
+        boolean moreToxThan = false;
+        int toxDiff = 0;
+        int closestChemIndex = -1;
+        String closestChemName;
+        int closestChemViewId;
+        String optSecondChem = "";
+
+        for (int i = 0; upperChemIndex < 0; i++) {
+            if (ld50 < TOX_SPECTRUM[i]) {
+                lowerChemIndex = i;
+                lowDiff = TOX_SPECTRUM[i] - ld50;
             } else {
-                closestTox = TOX_SPECTRUM.length;
+                upperChemIndex = i;
+                highDiff = ld50 - TOX_SPECTRUM[i];
             }
         }
-        int [] result = {lessToxic, moreToxic, toxDiff, closestTox};
-        return result;
-    }
-
-    private int getToxComparisonViewId(int spectrumIndex) {
-        int toxView;
-        switch (spectrumIndex) {
-            case 0: toxView = R.id.textview_water;
-                    break;
-            case 1: toxView = R.id.textview_sugar;
-                    break;
-            case 2: toxView = R.id.textview_alcohol;
-                    break;
-            case 3: toxView = R.id.textview_salt;
-                    break;
-            case 4: toxView = R.id.textview_caffeine;
-                    break;
-            case 5: toxView = R.id.textview_arsenic;
-                    break;
-            case 6: toxView = R.id.textview_cyanide;
-                    break;
-                    default: toxView = -1;
+        if (lowDiff < highDiff) {
+            moreToxThan = true;
+            toxDiff = lowDiff;
+            closestChemIndex = lowerChemIndex;
+        } else if (lowDiff > highDiff) {
+            toxDiff = highDiff;
+            closestChemIndex = upperChemIndex;
         }
-        return toxView;
+
+        Bundle chemValues = getComparisonChemValues(closestChemIndex);
+        closestChemViewId = chemValues.getInt(COMPARISON_VIEW_ID);
+        closestChemName = chemValues.getString(COMPARISON_CHEM);
+
+        if (closestChemName.equals(BETWEEN)) {
+            chemValues = getComparisonChemValues(lowerChemIndex);
+            closestChemName = chemValues.getString(COMPARISON_CHEM);
+            chemValues = getComparisonChemValues(upperChemIndex);
+            optSecondChem = chemValues.getString(COMPARISON_CHEM);
+        }
+
+        toxComparisonResults.putBoolean(IS_MORE_TOXIC, moreToxThan);
+        toxComparisonResults.putInt(TOX_DIFFERENCE, toxDiff);
+        toxComparisonResults.putString(COMPARISON_CHEM, closestChemName);
+        toxComparisonResults.putString(OPTIONAL_EXTRA_CHEM, optSecondChem);
+        toxComparisonResults.putInt(COMPARISON_VIEW_ID, closestChemViewId);
+        return toxComparisonResults;
     }
 
+    private Bundle getComparisonChemValues(int closestChemIndex) {
+        Bundle toxComparison = new Bundle(2);
+        String closestChemName;
+        int closestChemViewId;
+
+        switch (closestChemIndex) {
+            case 0: closestChemName = WATER;
+                closestChemViewId = R.id.textview_water;
+                break;
+            case 1: closestChemName = SUGAR;
+                closestChemViewId = R.id.textview_sugar;
+                break;
+            case 2: closestChemName = ALCOHOL;
+                closestChemViewId = R.id.textview_alcohol;
+                break;
+            case 3: closestChemName = SALT;
+                closestChemViewId = R.id.textview_salt;
+                break;
+            case 4: closestChemName = CAFFEINE;
+                closestChemViewId = R.id.textview_caffeine;
+                break;
+            case 5: closestChemName = ARSENIC;
+                closestChemViewId = R.id.textview_arsenic;
+                break;
+            case 6: closestChemName = CYANIDE;
+                closestChemViewId = R.id.textview_cyanide;
+                break;
+            default: closestChemName = BETWEEN;
+                closestChemViewId = -1;
+                break;
+        }
+
+        toxComparison.putString(COMPARISON_CHEM, closestChemName);
+        toxComparison.putInt(COMPARISON_VIEW_ID, closestChemViewId);
+        return toxComparison;
+    }
 
 
 //    /**
@@ -427,22 +486,7 @@ public class ChemCompareActivity extends AppCompatActivity {
                 try {
                     ld50Val = Integer.parseInt(medLethalDose);
                     Log.d(TAG, "LD50 retrieved: " + ld50Val);
-                    TextView name = findViewById(R.id.textview_chemname);
-                    name.setText(chemName);
-                    TextView explanation = findViewById(R.id.textview_chemcompare);
-                    explanation.setText("The Lethal Median Dose for " + chemName + " (" + chemId + ") is: "
-                            + ld50Val + " mg/kg.");
-                    if (isLandscapeMode(getApplicationContext())) {
-                        handleLandscapeOrientation(explanation);
-                    }
-                    int[] comparisonData = getToxComparison(ld50Val);
-                    spectrumNum = comparisonData[3];
-                    int viewId = getToxComparisonViewId(spectrumNum);
-                    TextView compareView = findViewById(viewId);
-                    compareView.setForeground(getResources().getDrawable(R.drawable.black_dot, null));
-                    compareView.setForegroundGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-                    findViewById(R.id.textview_firstsearch).setVisibility(View.GONE);
-                    findViewById(R.id.framelayout_chemcomparefab).setVisibility(View.VISIBLE);
+                    displaySearchResults();
                 } catch (NumberFormatException e) {
                     Log.d(TAG, "Caught error: " + e.getMessage());
                 }
