@@ -2,17 +2,29 @@
     <string name="app_label">ToxSense</string>
     <string name="chem_name">INGREDIENT NAME</string>
     <string name="title_activity_learn_more">LearnMoreActivity</string>
-    <string name="empty_pantry">Your pantry is empty! (Ingredients you add from a search will be stored here.)</string>
+    <string name="empty_pantry">Your pantry is empty! (Ingredients you add from a search will be
+        stored here.)</string>
     <string name="title_activity_my_pantry">Pantry</string>
     <string name="title_search_activity">Search</string>
     <string name="action_search">Search</string>
-    <string name="how_to_search">Enter an ingredient above (from a food package or any other source) to search for information on its relative toxicity.</string>
+    <string name="how_to_search">Enter an ingredient above (from a food package or any other source)
+        to search for information on its relative toxicity.</string>
     <string name="search_hint">Search ingredients</string>
     <string name="search_button">Ingredient Search</string>
     <string name="share_info">"Share tox info"</string>
     <string name="pantry_button">What\'s In My Pantry</string>
     <string name="pantry_add">Add to Your Pantry</string>
     <string name="learn_button">Learn More About Toxicity</string>
+    <string name="comparison_text">The lethal median dose for %1$s is %2$d mg/kg. That means
+        %1$s is about as toxic as %3$s.</string>
+    <string name="results_disclaimer">\n\nRemember: Quantity matters! The point of this comparison
+        is to demonstrate that toxicity is relative—not absolute. The hope is to offer a
+        beginner-friendly overview of a basic toxicology concept by referencing familiar elements,
+        but these results are not meant to be advice or guidance. True toxicity analysis is very
+        complicated.
+    </string>
+    <string name="between_values">The lethal median dose for %1$s is %2$d mg/kg. That means
+        %1$s is a bit more toxic than %3$s, but a bit less toxic than %4$s.</string>
     <string name="dummy_content">"Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -20,7 +32,7 @@
         "technologically advanced and open to imagination and magic.\n"
         "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
         "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
+        "flexibility of the material creates new affordances that supersede those in the physical "
         "world, without breaking the rules of physics.\n"
     </string>
 
