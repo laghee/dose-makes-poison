@@ -28,6 +28,6 @@
         android:textSize="30sp"
         android:text="@string/empty_pantry"
         android:textColor="@color/textColorPrimary"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 </FrameLayout>
