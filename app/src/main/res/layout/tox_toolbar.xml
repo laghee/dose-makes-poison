@@ -6,11 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
     android:background="?android:attr/colorPrimary"
-    android:elevation="4dp"
+    android:elevation="10dp"
     app:title="@string/app_label"
     app:titleTextAppearance="@style/CustomToolbarTitle"
     app:logo="@mipmap/ic_launcher_round"
-    app:titleMarginStart="32dp">
+    app:titleMarginStart="30dp"
+    app:titleMarginEnd="8dp">
 </android.support.v7.widget.Toolbar>
-
-    <!--app:navigationIcon="?attr/homeAsUpIndicator"-->
