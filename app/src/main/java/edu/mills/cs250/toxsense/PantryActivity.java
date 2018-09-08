@@ -35,7 +35,7 @@ import android.widget.Toast;
  * remove them from their personal pantry.
  */
 public class PantryActivity extends AppCompatActivity {
-    private static final String ERROR_FROM_DATABASE = "Error from database.";
+    private static final String ERROR_FROM_DATABASE = "Error from database. ";
     private static final String TAG = "PantryActivity";
     private static final String ID_COL = "_id";
     private SQLiteDatabase db;
@@ -48,13 +48,13 @@ public class PantryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
-        pantryList = findViewById(android.R.id.list);
-        Log.d("PantryActivity", "pantryList = " + pantryList);
+        pantryList = findViewById(R.id.pantry_list);
+        Log.d(TAG, "pantryList = " + pantryList);
         setSupportActionBar(findViewById(R.id.tox_toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Log.d("PantryActivity", "ChemPantryTask about to run.");
-        new ChemPantryTask().execute();
-        Log.d("PantryActivity", "ChemPantryTask just ran.");
+        Log.d(TAG, "PantryTask about to run.");
+        new PantryTask().execute();
+        Log.d(TAG, "PantryTask just ran.");
 
         pantryList.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(PantryActivity.this, ChemCompareActivity.class);
@@ -69,13 +69,13 @@ public class PantryActivity extends AppCompatActivity {
         // Inflate the options menu from XML
         getMenuInflater().inflate(R.menu.options_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        Log.d("ChemResults-onCreateOpt", "searchManager = " + searchManager);
+        Log.d(TAG, "searchManager = " + searchManager);
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView sv = (SearchView) search.getActionView();
         // Get the SearchView and set the searchable configuration
         sv.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, ChemCompareActivity.class)));
-        Log.d("Pantry-onCreateOpts", "getComponentName()= " + getComponentName());
-        Log.d("Pantry-onCreateOpts", "sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
+        Log.d(TAG, "onCreateOptionsMenu -> getComponentName()= " + getComponentName());
+        Log.d(TAG, "onCreateOptionsMenu -> sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -99,7 +99,7 @@ public class PantryActivity extends AppCompatActivity {
         }
     }
 
-    private class ChemPantryTask extends AsyncTask<Void, Void, Cursor> {
+    private class PantryTask extends AsyncTask<Void, Void, Cursor> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -107,42 +107,51 @@ public class PantryActivity extends AppCompatActivity {
 
         @Override
         protected Cursor doInBackground(Void... chems) {
-            SQLiteOpenHelper chemPantryHelper = new PantryDatabaseHelper(PantryActivity.this);
-            db = chemPantryHelper.getReadableDatabase();
-            Log.d("PantryActivity", "Now db = readableDatabase.");
+            SQLiteOpenHelper toxDbHelper = new ToxDatabaseHelper(PantryActivity.this);
+            db = toxDbHelper.getReadableDatabase();
+            Log.d(TAG, "Now db = readableDatabase.");
 
             try {
-                cursor = db.query(PantryDatabaseHelper.PANTRY_TABLE, new String[]{ID_COL, PantryDatabaseHelper.NAME_COL}, null, null, null, null, PantryDatabaseHelper.NAME_COL);
-                Log.d("PantryActivity", "Cursor assigned value.");
+                cursor = db.query(ToxsenseDbUtilities.PANTRY_TABLE,
+                        new String[]{ID_COL,
+                        ToxsenseDbUtilities.CHEM_NAME_COL},
+                        null,
+                        null,
+                        null,
+                        null,
+                        ToxsenseDbUtilities.CHEM_NAME_COL);
+                Log.d(TAG, "Cursor assigned value of query, item count: " + cursor.getCount());
             } catch (SQLiteException e) {
-                Log.d("PantryActivity", "Exception caught.");
+                Log.d(TAG, "Exception caught: " + e);
                 return null;
             }
-            Log.d("PantryActivity", "Cursor being returned.");
+            Log.d(TAG, "Cursor being returned: " + cursor.getCount() + ", "
+                    + cursor.getColumnNames());
             return cursor;
         }
 
         @Override
         protected void onPostExecute(Cursor cursor) {
-            Log.d("PantryActivity", "onPostExecute running.");
+            Log.d(TAG, "onPostExecute running.");
             super.onPostExecute(cursor);
 
             if (cursor != null && cursor.moveToFirst()) {
+//                String[] fromColumns = {ID_COL, ToxsenseDbUtilities.CHEM_NAME_COL};
+//                int[] toViews = {android.R.id.text2, R.id.pantry_list_item};
+                String[] fromColumns = {ToxsenseDbUtilities.CHEM_NAME_COL};
+                int[] toViews = {R.id.ingredient_name};
                 chemCursorAdapter = new SimpleCursorAdapter(PantryActivity.this,
-                        android.R.layout.simple_list_item_1,
-                        cursor,
-                        new String[]{PantryDatabaseHelper.NAME_COL},
-                        new int[]{android.R.id.text1},
-                        0);
-
+                        R.layout.pantry_list_item, cursor, fromColumns, toViews, 0);
                 pantryList.setAdapter(chemCursorAdapter);
+                Log.d(TAG, "cursorAdapter set: " + chemCursorAdapter.getCount() + ": " + chemCursorAdapter.toString());
             } else if (cursor == null) {
-                Log.d("PantryActivity", "Error toast to show.");
-                Toast toast = Toast.makeText(PantryActivity.this, ERROR_FROM_DATABASE, Toast.LENGTH_SHORT);
+                Log.d(TAG, "Error from database: cursor is null");
+                Toast toast = Toast.makeText(PantryActivity.this,
+                        ERROR_FROM_DATABASE, Toast.LENGTH_SHORT);
                 toast.show();
             } else {
-                Log.d("PantryActivity", "Cursor is empty.");
-                TextView emptyPantry = findViewById(R.id.empty);
+                Log.d(TAG, "Cursor is not null, but it's empty.");
+                TextView emptyPantry = findViewById(R.id.pantry_empty);
                 emptyPantry.setVisibility(View.VISIBLE);
                 emptyPantry.bringToFront();
             }

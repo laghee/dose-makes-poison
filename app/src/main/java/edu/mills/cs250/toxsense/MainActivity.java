@@ -9,7 +9,6 @@ package edu.mills.cs250.toxsense;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 /**
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Enables launch of {@link PantryActivity}.
      *
-     * @param view my library view
+     * @param view the pantry view
      */
     public void onBrowsePantry(View view){
         startActivity(new Intent(this, PantryActivity.class));
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Enables launch of {@link LearnMoreActivity}.
      *
-     * @param v the view of random game generator
+     * @param v the view of the resource links
      */
     public void onLearnMore(View v){
         startActivity(new Intent(this, LearnMoreActivity.class));
