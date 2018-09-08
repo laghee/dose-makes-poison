@@ -12,14 +12,13 @@
         layout="@layout/tox_toolbar" />
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context="edu.mills.cs250.toxsense.PantryActivity"
-        android:id="@id/android:list"
+        android:id="@+id/pantry_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:drawSelectorOnTop="false"/>
+        android:layout_marginTop="?android:attr/actionBarSize" />
+
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/empty"
+        android:id="@+id/pantry_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
@@ -29,5 +28,4 @@
         android:text="@string/empty_pantry"
         android:textColor="@color/textColorPrimary"
         android:visibility="gone" />
-
 </FrameLayout>
