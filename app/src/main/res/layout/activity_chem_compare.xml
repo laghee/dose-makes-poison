@@ -36,7 +36,7 @@
             android:id="@+id/relativelayout_comparebody"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="70dp">
+            android:layout_marginTop="?android:attr/actionBarSize">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textview_chemname"

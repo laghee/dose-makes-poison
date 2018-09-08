@@ -6,7 +6,6 @@
  */
 package edu.mills.cs250.toxsense;
 
-import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Provides a view of a chemical in the user's pantry.
@@ -32,20 +31,6 @@ public class Chem {
         this.ld50Val = ld50Val;
         this.comparisonChem = comparisonChem;
         this.comparisonViewId = comparisonViewId;
-    }
-
-    /**
-     * Constructs a chemical.
-     *
-     * @param name          the chemical name
-     * @param chemId     the ChemID database number of the chemical
-     */
-    Chem (String name, String chemId) {
-        this.name = name;
-        this.chemId = chemId;
-        this.ld50Val = -1;
-        this.comparisonChem = "";
-        this.comparisonViewId = -1;
     }
 
     /**

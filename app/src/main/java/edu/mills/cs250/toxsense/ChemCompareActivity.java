@@ -87,8 +87,7 @@ public class ChemCompareActivity extends AppCompatActivity {
     private static final int [] TOX_SPECTRUM = {90000, 30000, 7060, 3000, 200, 15, 5};
 
     private boolean web = true;
-    private SQLiteDatabase chemRefDb;
-    private SQLiteDatabase pantryDb;
+    private SQLiteDatabase db;
     private String chemName;
     private String chemId;
     private int ld50Val;
@@ -117,8 +116,6 @@ public class ChemCompareActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view,"You'd like to share this ingredient! Yay!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 View chemView = findViewById(R.id.framelayout_compare);
                 chemView.setDrawingCacheEnabled(true);
                 Bitmap screen = chemView.getDrawingCache();
@@ -209,6 +206,8 @@ public class ChemCompareActivity extends AppCompatActivity {
     }
 
     private void displaySearchResults(Bundle results) {
+        chemId = results.getString(CHEM_ID);
+        Log.d(TAG, "Value of chemId when about to display: " + chemId);
         TextView name = findViewById(R.id.textview_chemname);
         chemName = results.getString(CHEM_NAME);
         name.setText(chemName);
@@ -316,7 +315,6 @@ public class ChemCompareActivity extends AppCompatActivity {
                 closestChemViewId = -1;
                 break;
         }
-
         toxComparison.putString(COMPARISON_CHEM, closestChemName);
         toxComparison.putInt(COMPARISON_VIEW_ID, closestChemViewId);
         return toxComparison;
@@ -332,6 +330,8 @@ public class ChemCompareActivity extends AppCompatActivity {
         ToggleButton addToPantry = findViewById(R.id.button_addtopantry);
 
         if (addToPantry.isChecked()) {
+            Log.d(TAG, "Add2pantry toggled-> Chem props: " + chemName + " " + chemId + " "
+                    + ld50Val + " " + comparisonChem + " " + comparisonViewId);
             Chem chem = new Chem(chemName, chemId, ld50Val, comparisonChem, comparisonViewId);
             new AddChemToPantryTask().execute(chem);
         } else {
@@ -360,11 +360,8 @@ public class ChemCompareActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (chemRefDb != null) {
-            chemRefDb.close();
-        }
-        if (pantryDb != null) {
-            pantryDb.close();
+        if (db != null) {
+            db.close();
         }
     }
 
@@ -376,13 +373,12 @@ public class ChemCompareActivity extends AppCompatActivity {
     private class ChemRefLookupTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            String searchTerm = params[0];
+            chemName = params[0];
             try {
                 SQLiteOpenHelper chemRefDatabaseHelper =
-                        new ChemRefDatabaseHelper(ChemCompareActivity.this);
-                chemRefDb = chemRefDatabaseHelper.getReadableDatabase();
-                chemName = searchTerm;
-                return ChemRefUtilities.getChemId(chemRefDb, searchTerm);
+                        new ToxDatabaseHelper(ChemCompareActivity.this);
+                db = chemRefDatabaseHelper.getReadableDatabase();
+                return ToxsenseDbUtilities.getChemRegId(db, chemName);
             } catch (SQLiteException e) {
                 Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
                 return null;
@@ -393,9 +389,9 @@ public class ChemCompareActivity extends AppCompatActivity {
         protected void onPostExecute(String regNum) {
 
             if (regNum != null) {
-                Log.d(TAG + " ChRfLkPost", "RegNum = " + regNum);
                 chemId = regNum;
-                new ToxnetWebTask().execute(regNum);
+                Log.d(TAG, "ChemRefLookupPost -> chemId = " + chemId);
+                new ToxnetWebTask().execute(chemId);
             } else {
                 Toast toast = Toast.makeText(ChemCompareActivity.this,
                         "ERROR RETRIEVING CHEMID NUMBER", Toast.LENGTH_LONG);
@@ -407,7 +403,8 @@ public class ChemCompareActivity extends AppCompatActivity {
     private class ToxnetWebTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            String toxnetUrl = "https://chem.nlm.nih.gov/chemidplus/rn/" + params[0];
+            chemId = params[0];
+            String toxnetUrl = "https://chem.nlm.nih.gov/chemidplus/rn/" + chemId;
             String lethalDoseVal = "";
 
             try {
@@ -472,6 +469,8 @@ public class ChemCompareActivity extends AppCompatActivity {
                     Log.d(TAG, "LD50 retrieved: " + ld50Val);
                     Bundle toxComparisonResults = getToxComparisonResults(ld50Val);
                     toxComparisonResults.putString(CHEM_NAME, chemName);
+                    Log.d(TAG, "Value of chemId when making display bundle: " + chemId);
+                    toxComparisonResults.putString(CHEM_ID, chemId);
                     toxComparisonResults.putInt(LD50, ld50Val);
                     displaySearchResults(toxComparisonResults);
                 } catch (NumberFormatException e) {
@@ -491,10 +490,10 @@ public class ChemCompareActivity extends AppCompatActivity {
 //            String casNum = params[0];
 //            String[] chemInfo = {null, casNum};
 //            try {
-//                SQLiteOpenHelper pantryDatabaseHelper =
-//                        new PantryDatabaseHelper(ChemCompareActivity.this);
-//                db = pantryDatabaseHelper.getReadableDatabase();
-//                Integer pantryId = PantryUtilities.getPantryIdIfExists(db, casNum);
+//                SQLiteOpenHelper toxDbHelper =
+//                        new ToxDatabaseHelper(ChemCompareActivity.this);
+//                db = toxDbHelper.getReadableDatabase();
+//                Integer pantryId = ToxsenseDbUtilities.getPantryIdIfExists(db, casNum);
 //                if (pantryId > 0) {
 //                    chemInfo[0] = pantryId.toString();
 //                    return chemInfo;
@@ -520,10 +519,10 @@ public class ChemCompareActivity extends AppCompatActivity {
         protected Chem doInBackground(Integer... params) {
             int rowId = params[0];
             try {
-                SQLiteOpenHelper pantryDatabaseHelper =
-                        new PantryDatabaseHelper(ChemCompareActivity.this);
-                pantryDb = pantryDatabaseHelper.getReadableDatabase();
-                return PantryUtilities.getChem(pantryDb, rowId);
+                SQLiteOpenHelper toxDbHelper =
+                        new ToxDatabaseHelper(ChemCompareActivity.this);
+                db = toxDbHelper.getReadableDatabase();
+                return ToxsenseDbUtilities.getChem(db, rowId);
             } catch (SQLiteException e) {
                 Log.d(TAG, "Caught SQLite Exception" + e.getMessage());
                 return null;
@@ -538,7 +537,6 @@ public class ChemCompareActivity extends AppCompatActivity {
                 chemProps.putString(CHEM_ID, chem.getChemId());
                 chemProps.putInt(LD50, chem.getLd50Val());
                 chemProps.putString(COMPARISON_CHEM, chem.getComparisonChem());
-                chemProps.putString(OPTIONAL_EXTRA_CHEM, "");
                 chemProps.putInt(COMPARISON_VIEW_ID, chem.getComparisonViewId());
                 displaySearchResults(chemProps);
                 ToggleButton toggleButton = findViewById(R.id.button_addtopantry);
@@ -550,18 +548,18 @@ public class ChemCompareActivity extends AppCompatActivity {
         }
     }
 
-        //Inner class to add the chem to the pantry
+    //Inner class to add the chem to the pantry
     private class AddChemToPantryTask extends AsyncTask<Chem, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Chem... chem) {
             Chem newChem = chem[0];
             try {
-                SQLiteOpenHelper pantryDatabaseHelper =
-                        new PantryDatabaseHelper(ChemCompareActivity.this);
-                pantryDb = pantryDatabaseHelper.getWritableDatabase();
-                PantryUtilities.insertChem(pantryDb, newChem);
-                pantryDb.close();
+                SQLiteOpenHelper toxDbHelper =
+                        new ToxDatabaseHelper(ChemCompareActivity.this);
+                db = toxDbHelper.getWritableDatabase();
+                ToxsenseDbUtilities.insertChem(db, newChem);
+                db.close();
                 return true;
             } catch (SQLiteException e) {
                 Log.d(TAG, "SQLite Exception caught");
@@ -586,12 +584,12 @@ public class ChemCompareActivity extends AppCompatActivity {
         protected Integer doInBackground(ContentValues... chems) {
 //            String chemId = chems[0].getAsString(CHEM_ID);
             int rowId = chems[0].getAsInteger(ROW_ID);
-            SQLiteOpenHelper pantryDatabaseHelper = new PantryDatabaseHelper(ChemCompareActivity.this);
+            SQLiteOpenHelper toxDbHelper = new ToxDatabaseHelper(ChemCompareActivity.this);
             try {
-                pantryDb = pantryDatabaseHelper.getWritableDatabase();
-//                int pantryId = PantryUtilities.getPantryIdIfExists(pantryDb, chemId);
-                PantryUtilities.removeChemByPantryId(pantryDb, rowId);
-                pantryDb.close();
+                db = toxDbHelper.getWritableDatabase();
+//                int pantryId = ToxDbUtilities.getPantryIdIfExists(db, chemId);
+                ToxsenseDbUtilities.removeChemByPantryId(db, rowId);
+                db.close();
                 return rowId;
             } catch (SQLiteException e) {
                 Log.d(TAG, "SQLite Exception caught while removing chem from db");
