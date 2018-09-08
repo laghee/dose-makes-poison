@@ -6,7 +6,6 @@
  */
 package edu.mills.cs250.toxsense;
 
-import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Provides a view of a chemical in the user's pantry.
@@ -14,39 +13,24 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Chem {
 
-    private String name, chemId, compareChem;
-    private int ld50Val, spectrumNum;
-    private SQLiteDatabase db;
+    private String name, chemId, comparisonChem;
+    private int ld50Val, comparisonViewId;
 
     /**
      * Constructs a chemical.
      *
-     * @param name        the chemical name
-     * @param chemId      the ChemID database number of the chemical
-     * @param ld50Val     the LD50 value of the chemical
-     * @param compareChem the spectrum comparison chemical with closest LD50 value
-     * @param spectrumNum the number of block where the chemical falls on the toxicity spectrum
+     * @param name              the chemical name
+     * @param chemId            the ChemID database number of the chemical
+     * @param ld50Val           the LD50 value of the chemical
+     * @param comparisonChem    the spectrum comparison chemical with closest LD50 value
+     * @param comparisonViewId  the number of block where the chemical falls on the toxicity spectrum
      */
-    Chem (String name, String chemId, int ld50Val, String compareChem, int spectrumNum) {
+    Chem (String name, String chemId, int ld50Val, String comparisonChem, int comparisonViewId) {
         this.name = name;
         this.chemId = chemId;
         this.ld50Val = ld50Val;
-        this.compareChem = compareChem;
-        this.spectrumNum = spectrumNum;
-    }
-
-    /**
-     * Constructs a chemical.
-     *
-     * @param name          the chemical name
-     * @param chemId     the ChemID database number of the chemical
-     */
-    Chem (String name, String chemId) {
-        this.name = name;
-        this.chemId = chemId;
-        this.ld50Val = -1;
-        this.compareChem = "";
-        this.spectrumNum = -1;
+        this.comparisonChem = comparisonChem;
+        this.comparisonViewId = comparisonViewId;
     }
 
     /**
@@ -108,17 +92,17 @@ public class Chem {
      *
      * @return the comparison chemical on the spectrum closest in LD50 value
      */
-    public String getCompareChem() {
-        return compareChem;
+    public String getComparisonChem() {
+        return comparisonChem;
     }
 
     /**
      * Sets the comparison chemical.
      *
-     * @param compareChem the comparison chemical closest on the toxicity spectrum
+     * @param comparisonChem the comparison chemical closest on the toxicity spectrum
      */
-    public void setCompareChem(String compareChem) {
-        this.compareChem = compareChem;
+    public void setComparisonChem(String comparisonChem) {
+        this.comparisonChem = comparisonChem;
     }
 
     /**
@@ -126,17 +110,17 @@ public class Chem {
      *
      * @return the spectrum block number
      */
-    public int getSpectrumNum() {
-        return spectrumNum;
+    public int getComparisonViewId() {
+        return comparisonViewId;
     }
 
     /**
      * Sets the spectrum position number.
      *
-     * @param spectrumNum the position number on the toxicity spectrum of the chemical
+     * @param comparisonViewId the position number on the toxicity spectrum of the chemical
      */
-    public void setSpectrumNum(int spectrumNum) {
-        this.spectrumNum = spectrumNum;
+    public void setComparisonViewId(int comparisonViewId) {
+        this.comparisonViewId = comparisonViewId;
     }
 
 }

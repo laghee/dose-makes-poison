@@ -35,8 +35,8 @@
         <RelativeLayout
             android:id="@+id/relativelayout_comparebody"
             android:layout_width="match_parent"
-            android:layout_height="530dp"
-            android:layout_marginTop="70dp">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?android:attr/actionBarSize">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textview_chemname"
@@ -61,6 +61,7 @@
                 android:layout_marginTop="4dp"
                 android:backgroundTint="@color/primaryDarkColor"
                 android:checked="false"
+                android:onClick="onAddToPantryClicked"
                 android:textColor="@color/textColorPrimary"
                 android:textOff="ADD"
                 android:textOn="REMOVE"

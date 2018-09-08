@@ -26,7 +26,7 @@ public class PantryUtilities {
          */
         public static Chem getChem(SQLiteDatabase db, int chemId) {
             Cursor cursor = db.query(PANTRY_TABLE,
-                    new String[]{NAME_COL, CHEMID_COL, LD50_COL, COMPARE_COL, SPNUM_COL},
+                    new String[]{NAME_COL, CHEMID_COL, LD50_COL, COMPARE_COL, VIEWID_COL},
                     "_id = ?",
                     new String[]{Integer.toString(chemId)},
                     null, null, null);
@@ -54,8 +54,8 @@ public class PantryUtilities {
             chemValues.put(NAME_COL, chem.getName());
             chemValues.put(CHEMID_COL, chem.getChemId());
             chemValues.put(LD50_COL, chem.getLd50Val());
-            chemValues.put(COMPARE_COL, chem.getCompareChem());
-            chemValues.put(SPNUM_COL, chem.getSpectrumNum());
+            chemValues.put(COMPARE_COL, chem.getComparisonChem());
+            chemValues.put(VIEWID_COL, chem.getComparisonViewId());
 
 
             Log.d("DatabaseUtils", "Successfully wrote" + chem.getName() + "to db");

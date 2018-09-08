@@ -36,11 +36,8 @@ import android.widget.Toast;
  */
 public class PantryActivity extends AppCompatActivity {
     private static final String ERROR_FROM_DATABASE = "Error from database.";
-    private static final String PANTRY_IS_EMPTY = "Your pantry is empty! When you search for" +
-            " ingredients, they will be stored here.";
-    private static final String PANTRY_ACTIVITY = "PantryActivity";
-    private static final String RAW_QUERY_BY_NAME = "SELECT * FROM PANTRY ORDER BY NAME";
-    private static final String NAME_COL = "NAME";
+    private static final String TAG = "PantryActivity";
+    private static final String ID_COL = "_id";
     private SQLiteDatabase db;
     private Cursor cursor;
     private CursorAdapter chemCursorAdapter;
@@ -61,8 +58,8 @@ public class PantryActivity extends AppCompatActivity {
 
         pantryList.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(PantryActivity.this, ChemCompareActivity.class);
-            intent.putExtra(ChemCompareActivity.EXTRA_CHEMNO, (int) id);
-            intent.putExtra(ChemCompareActivity.EXTRA_CLASSNAME, PANTRY_ACTIVITY);
+            intent.putExtra(ChemCompareActivity.EXTRA_PANTRY_ID, (int) id);
+            intent.putExtra(ChemCompareActivity.EXTRA_CLASSNAME, ChemCompareActivity.PANTRY_ACTIVITY);
             startActivity(intent);
         });
     }
@@ -115,7 +112,7 @@ public class PantryActivity extends AppCompatActivity {
             Log.d("PantryActivity", "Now db = readableDatabase.");
 
             try {
-                cursor = db.rawQuery(RAW_QUERY_BY_NAME, null);
+                cursor = db.query(PantryDatabaseHelper.PANTRY_TABLE, new String[]{ID_COL, PantryDatabaseHelper.NAME_COL}, null, null, null, null, PantryDatabaseHelper.NAME_COL);
                 Log.d("PantryActivity", "Cursor assigned value.");
             } catch (SQLiteException e) {
                 Log.d("PantryActivity", "Exception caught.");
@@ -134,9 +131,10 @@ public class PantryActivity extends AppCompatActivity {
                 chemCursorAdapter = new SimpleCursorAdapter(PantryActivity.this,
                         android.R.layout.simple_list_item_1,
                         cursor,
-                        new String[]{NAME_COL},
+                        new String[]{PantryDatabaseHelper.NAME_COL},
                         new int[]{android.R.id.text1},
                         0);
+
                 pantryList.setAdapter(chemCursorAdapter);
             } else if (cursor == null) {
                 Log.d("PantryActivity", "Error toast to show.");
