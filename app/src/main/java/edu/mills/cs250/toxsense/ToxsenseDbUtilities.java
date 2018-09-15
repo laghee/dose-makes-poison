@@ -147,16 +147,16 @@ public class ToxsenseDbUtilities {
      * Checks for a chemical in the pantry table and, if it exists, retrieves its row id number.
      *
      * @param db     the local database
-     * @param chemid the ChemID database number
+     * @param name the chemical name
      * @return the pantry id
      */
-    public static int getPantryIdIfExists(SQLiteDatabase db, String chemid) {
+    public static int getPantryIdIfExists(SQLiteDatabase db, String name) {
 
         int pantryId = -1;
         Cursor cursor = db.query(PANTRY_TABLE,
                 new String[]{"_id"},
-                CHEMID_COL + " = ?",
-                new String[]{chemid},
+                CHEM_NAME_COL + " = ?",
+                new String[]{name},
                 null, null, null);
         if (cursor.moveToFirst()) {
             pantryId = cursor.getInt(0);
