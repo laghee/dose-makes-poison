@@ -74,8 +74,6 @@ public class PantryActivity extends AppCompatActivity {
         SearchView sv = (SearchView) search.getActionView();
         // Get the SearchView and set the searchable configuration
         sv.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, ChemCompareActivity.class)));
-        Log.d(TAG, "onCreateOptionsMenu -> getComponentName()= " + getComponentName());
-        Log.d(TAG, "onCreateOptionsMenu -> sv.setSearchableInfo= " + searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -136,8 +134,6 @@ public class PantryActivity extends AppCompatActivity {
             super.onPostExecute(cursor);
 
             if (cursor != null && cursor.moveToFirst()) {
-//                String[] fromColumns = {ID_COL, ToxsenseDbUtilities.CHEM_NAME_COL};
-//                int[] toViews = {android.R.id.text2, R.id.pantry_list_item};
                 String[] fromColumns = {ToxsenseDbUtilities.CHEM_NAME_COL};
                 int[] toViews = {R.id.ingredient_name};
                 chemCursorAdapter = new SimpleCursorAdapter(PantryActivity.this,
