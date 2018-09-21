@@ -75,7 +75,6 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_toEndOf="@+id/gridlayout_toxscale"
-                android:text="@string/dummy_content"
                 android:textAlignment="center"
                 android:textColor="@color/textColorPrimary" />
 

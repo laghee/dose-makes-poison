@@ -11,7 +11,7 @@
         to search for information on its relative toxicity.</string>
     <string name="search_hint">Search ingredients</string>
     <string name="search_button">Ingredient Search</string>
-    <string name="share_info">"Share tox info"</string>
+    <string name="share_info">Share tox info</string>
     <string name="pantry_button">What\'s In My Pantry</string>
     <string name="pantry_add">Add to Your Pantry</string>
     <string name="learn_button">Learn More About Toxicity</string>
@@ -25,14 +25,14 @@
     </string>
     <string name="between_values">The lethal median dose for %1$s is %2$d mg/kg. That means
         %1$s is a bit more toxic than %3$s, but a bit less toxic than %4$s.</string>
-    <string name="dummy_content">"Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supersede those in the physical "
-        "world, without breaking the rules of physics.\n"
-    </string>
+    <string name="usdhhs"><a href="https://sis.nlm.nih.gov/enviro/especiallystudents.html">
+        U.S. Department of Health and Human Services</a></string>
+    <string name="ccohs"><a href="https://www.ccohs.ca/oshanswers/chemicals/poisonou.html">
+        Canadian Centre for Occupational Health and Safety</a></string>
+    <string name="cami_ryan">
+        <a href="https://camiryan.com/2016/03/09/the-the-dose-makes-the-poison-the-2016-edition/">
+            Cami Ryan, Ph.D.</a></string>
+    <string name="sci_am">
+        <a href="https://blogs.scientificamerican.com/guest-blog/natural-vs-synthetic-chemicals-is-a-gray-matter/">
+            Scientific American</a></string>
 </resources>
