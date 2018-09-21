@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/framelayout_learn"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/primaryLightColor" >
@@ -8,20 +9,52 @@
         android:id="@+id/tox_toolbar"
         layout="@layout/tox_toolbar" />
 
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="edu.mills.cs250.toxsense.LearnMoreActivity">
-
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textview_usdhhs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/tox_toolbar"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
             android:textColor="@color/textColorPrimary"
             android:textSize="20sp"
-            android:text="@string/dummy_content" />
+            android:text="@string/usdhhs" />
 
-    </android.support.v4.widget.NestedScrollView>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textview_ccohs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/textview_usdhhs"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="20sp"
+            android:text="@string/ccohs" />
 
-</FrameLayout>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textview_camiryan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/textview_ccohs"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="20sp"
+            android:text="@string/cami_ryan" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textview_sciam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/textview_camiryan"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="20sp"
+            android:text="@string/sci_am" />
+
+</RelativeLayout>
