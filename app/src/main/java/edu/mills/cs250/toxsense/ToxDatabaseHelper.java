@@ -8,7 +8,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class ToxDatabaseHelper extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "toxdata.db";
+    private static final String DATABASE_NAME = "toxdata";
     private static final int DATABASE_VERSION = 1;
     private static final String TAG = "ToxDbHelper";
 

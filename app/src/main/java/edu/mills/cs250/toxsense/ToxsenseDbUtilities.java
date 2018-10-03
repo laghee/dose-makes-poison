@@ -6,6 +6,7 @@
  */
 package edu.mills.cs250.toxsense;
 
+import android.app.SearchManager;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,12 +23,12 @@ public class ToxsenseDbUtilities {
     /**
      * Name of column in chemref table with name of chemical.
      */
-    static final String REF_NAME_COL = "name";
+    static final String REF_NAME_COL = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
     /**
      * Name of column in chemref table with CAS Registry number.
      */
-    static final String REGNUM_COL = "regnum";
+    static final String REGNUM_COL = SearchManager.SUGGEST_COLUMN_INTENT_DATA;
 
     /**
      * Name of database table keeping track of all saved chemicals in personal pantry.
@@ -82,6 +83,28 @@ public class ToxsenseDbUtilities {
         }
         cursor.close();
         return regId;
+    }
+
+    /**
+     * Looks up a chemical by registry number in the chemical reference table and retrieves its name.
+     *
+     * @param db   the local database
+     * @param regNum the chemical name
+     * @return the name
+     */
+    public static String getChemName(SQLiteDatabase db, String regNum) {
+
+        String name = "";
+        Cursor cursor = db.query(CHEMREF_TABLE,
+                new String[]{REF_NAME_COL},
+                REGNUM_COL + " = ?",
+                new String[]{regNum},
+                null, null, null);
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0);
+        }
+        cursor.close();
+        return name;
     }
 
     /**
@@ -144,19 +167,42 @@ public class ToxsenseDbUtilities {
     }
 
     /**
-     * Checks for a chemical in the pantry table and, if it exists, retrieves its row id number.
+     * Checks for a chemical in the pantry table by name and, if it exists, retrieves its row id number.
      *
      * @param db     the local database
      * @param name the chemical name
      * @return the pantry id
      */
-    public static int getPantryIdIfExists(SQLiteDatabase db, String name) {
+    public static int getPantryIdByName(SQLiteDatabase db, String name) {
 
         int pantryId = -1;
         Cursor cursor = db.query(PANTRY_TABLE,
                 new String[]{"_id"},
                 CHEM_NAME_COL + " = ?",
                 new String[]{name},
+                null, null, null);
+        if (cursor.moveToFirst()) {
+            pantryId = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return pantryId;
+    }
+
+    /**
+     * Checks for a chemical in the pantry table by CAS registry number and, if it exists, retrieves its row id number.
+     *
+     * @param db    the local database
+     * @param id    the CAS registry number
+     * @return the pantry id
+     */
+    public static int getPantryIdByRegNum(SQLiteDatabase db, String id) {
+
+        int pantryId = -1;
+        Cursor cursor = db.query(PANTRY_TABLE,
+                new String[]{"_id"},
+                CHEMID_COL + " = ?",
+                new String[]{id},
                 null, null, null);
         if (cursor.moveToFirst()) {
             pantryId = cursor.getInt(0);
