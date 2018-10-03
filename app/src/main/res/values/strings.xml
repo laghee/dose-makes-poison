@@ -17,12 +17,10 @@
     <string name="learn_button">Learn More About Toxicity</string>
     <string name="comparison_text">The lethal median dose for %1$s is %2$d mg/kg. That means
         %1$s is about as toxic as %3$s.</string>
-    <string name="results_disclaimer">\n\nRemember: Toxicity analysis and risk evaluation are
-        complicated! Quantity ingested, duration of exposure, individual vulnerabilities, and many
-        other factors can affect toxicity. And car travel is probably the highest risk most people
-        engage in on a daily basis. The point of this comparison is to demonstrate that toxicity is
-        relative—not absolute and to offer a beginner-friendly overview of toxicology by referencing
-        familiar elements. These results are not meant to be taken as advice or guidance.
+    <string name="results_disclaimer">\n\nRemember: Toxicity, like life, is complicated! The point
+        of this comparison is to demonstrate that toxicity is relative and to offer a beginner-friendly
+        perspective on toxicology by referencing familiar elements. These results are not meant to
+        be taken as advice or guidance.
     </string>
     <string name="between_values">The lethal median dose for %1$s is %2$d mg/kg. That means
         %1$s is a bit more toxic than %3$s, but a bit less toxic than %4$s.</string>
