@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <provider
+            android:name="edu.mills.cs250.toxsense.ChemSuggestionProvider"
+            android:authorities="edu.mills.cs250.toxsense.ChemSuggestionProvider" >
+        </provider>
+        <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="edu.mills.cs250.toxsense.fileprovider"
             android:exported="false"
