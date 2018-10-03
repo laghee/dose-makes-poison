@@ -123,15 +123,18 @@ public class ChemCompareActivity extends AppCompatActivity {
                     screen.compress(Bitmap.CompressFormat.PNG, 100, output);
                     output.close();
                 } catch (IOException e) {
-                    Snackbar.make(chemView, "Ooops! Problem capturing your screen!", Snackbar.LENGTH_LONG);
+                    Snackbar.make(chemView, "Ooops! Problem capturing your screen!",
+                            Snackbar.LENGTH_LONG);
                 }
                 File pngFile = new File(getApplicationContext().getFilesDir(), "toxinfo.png");
-                Uri uriToImage = FileProvider.getUriForFile(getApplicationContext(), "edu.mills.cs250.toxsense.fileprovider", pngFile);
+                Uri uriToImage = FileProvider.getUriForFile(getApplicationContext(),
+                        "edu.mills.cs250.toxsense.fileprovider", pngFile);
                 Intent shareInfo = new Intent(Intent.ACTION_SEND);
                 shareInfo.putExtra(Intent.EXTRA_STREAM, uriToImage);
                 shareInfo.setType("image/png");
                 shareInfo.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(shareInfo, getResources().getText(R.string.share_info)));
+                startActivity(Intent.createChooser(shareInfo,
+                        getResources().getText(R.string.share_info)));
             }
         });
     }
@@ -162,7 +165,8 @@ public class ChemCompareActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == (R.id.action_search)) {
-            Toast.makeText(getApplicationContext(), "Search = " + onSearchRequested(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Search = " + onSearchRequested(),
+                    Toast.LENGTH_LONG).show();
             return onSearchRequested();
         } else {
             return false;
@@ -184,7 +188,8 @@ public class ChemCompareActivity extends AppCompatActivity {
             Log.d(TAG, "DataString= " + intent.getDataString());
             new CheckPantryForChemIdTask().execute(chemicalId);
         }
-        else if ((intent.getExtras() != null) && (intent.getExtras().get(EXTRA_CLASSNAME).equals(PANTRY_ACTIVITY))) {
+        else if ((intent.getExtras() != null) &&
+                (intent.getExtras().get(EXTRA_CLASSNAME).equals(PANTRY_ACTIVITY))) {
             Log.d(TAG, "Non-search intent passed to handleIntent(): " + intent.getExtras());
             int listItem = (int) intent.getExtras().get(EXTRA_PANTRY_ID);
             new PantryChemResultsTask().execute(listItem);
@@ -206,11 +211,13 @@ public class ChemCompareActivity extends AppCompatActivity {
         body.setLayoutParams(bodyLp);
         GridLayout spectrum = findViewById(R.id.gridlayout_toxscale);
         spectrum.setOrientation(GridLayout.HORIZONTAL);
-        RelativeLayout.LayoutParams explanationLp = (RelativeLayout.LayoutParams) explanation.getLayoutParams();
+        RelativeLayout.LayoutParams explanationLp =
+                (RelativeLayout.LayoutParams) explanation.getLayoutParams();
         explanationLp.addRule(RelativeLayout.CENTER_HORIZONTAL);
         explanationLp.removeRule(RelativeLayout.END_OF);
         explanation.setLayoutParams(explanationLp);
-        RelativeLayout.LayoutParams spectrumLp = (RelativeLayout.LayoutParams) spectrum.getLayoutParams();
+        RelativeLayout.LayoutParams spectrumLp =
+                (RelativeLayout.LayoutParams) spectrum.getLayoutParams();
         spectrumLp.addRule(RelativeLayout.BELOW, R.id.textview_chemcompare);
         spectrumLp.addRule(RelativeLayout.CENTER_HORIZONTAL);
         spectrum.setLayoutParams(spectrumLp);
