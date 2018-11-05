@@ -52,7 +52,7 @@
                 android:textStyle="bold" />
 
             <ToggleButton
-                android:id="@+id/button_addtopantry"
+                android:id="@+id/button_modifypantry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textview_chemname"
@@ -61,7 +61,7 @@
                 android:layout_marginTop="4dp"
                 android:backgroundTint="@color/primaryDarkColor"
                 android:checked="false"
-                android:onClick="onAddToPantryClicked"
+                android:onClick="onModifyPantryClicked"
                 android:textColor="@color/textColorPrimary"
                 android:textOff="ADD"
                 android:textOn="REMOVE"
@@ -71,7 +71,7 @@
                 android:id="@+id/textview_chemcompare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/button_addtopantry"
+                android:layout_below="@id/button_modifypantry"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_toEndOf="@+id/gridlayout_toxscale"
