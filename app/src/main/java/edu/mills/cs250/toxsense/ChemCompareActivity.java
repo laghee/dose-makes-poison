@@ -93,7 +93,7 @@ public class ChemCompareActivity extends AppCompatActivity {
     private String secondComparison;
     private int comparisonViewId;
     private FloatingActionButton fab;
-    private ToggleButton addToPantry;
+    private ToggleButton modifyPantry;
 
 
     @Override
@@ -343,13 +343,13 @@ public class ChemCompareActivity extends AppCompatActivity {
      *
      * @param view the view to add to or remove from a pantry
      */
-    public void onAddToPantryClicked(View view) {
+    public void onModifyPantryClicked(View view) {
 
-        addToPantry = findViewById(R.id.button_addtopantry);
+        modifyPantry = findViewById(R.id.button_modifypantry);
         Log.d(TAG, "Add2pantry toggled-> Chem props: " + chemName + " " + chemId + " "
                 + ld50Val + " " + comparisonChem + " " + comparisonViewId);
 
-        if (addToPantry.isChecked()) {
+        if (modifyPantry.isChecked()) {
             Chem chem = new Chem(chemName, chemId, ld50Val, comparisonChem, comparisonViewId);
             new AddChemToPantryTask().execute(chem);
             Log.d(TAG,"Chem (" + chemName + ") added to pantry.");
@@ -493,8 +493,8 @@ public class ChemCompareActivity extends AppCompatActivity {
                     toxComparisonResults.putString(CHEM_ID, chemId);
                     toxComparisonResults.putInt(LD50, ld50Val);
                     displaySearchResults(toxComparisonResults);
-                    addToPantry = findViewById(R.id.button_addtopantry);
-                    addToPantry.setChecked(false);
+                    modifyPantry = findViewById(R.id.button_modifypantry);
+                    modifyPantry.setChecked(false);
                 } catch (NumberFormatException e) {
                     Log.d(TAG, "Caught error: " + e.getMessage());
                 }
@@ -605,8 +605,8 @@ public class ChemCompareActivity extends AppCompatActivity {
                 chemProps.putString(COMPARISON_CHEM, chem.getComparisonChem());
                 chemProps.putInt(COMPARISON_VIEW_ID, chem.getComparisonViewId());
                 displaySearchResults(chemProps);
-                addToPantry = findViewById(R.id.button_addtopantry);
-                addToPantry.setChecked(true);
+                modifyPantry = findViewById(R.id.button_modifypantry);
+                modifyPantry.setChecked(true);
             } else {
                 Toast toast = Toast.makeText(ChemCompareActivity.this, DB_UNAVAIL, Toast.LENGTH_SHORT);
                 toast.show();
