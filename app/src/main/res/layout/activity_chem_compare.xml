@@ -183,10 +183,8 @@
             app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
             app:elevation="20dp"
             app:rippleColor="@color/primaryDarkColor"
-            app:srcCompat="@android:drawable/ic_menu_share"
+            app:srcCompat="@drawable/twotone_share"
             android:visibility="gone" />
     </FrameLayout>
 
 </FrameLayout>
-
-    <!-- FAB THING && framelayout_chemcomparefab android:visibility="gone"-->
