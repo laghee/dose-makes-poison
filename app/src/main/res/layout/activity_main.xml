@@ -54,7 +54,7 @@
             android:fontFamily="sans-serif-condensed"
             android:textStyle="bold"
             android:background="@drawable/twotone_shopping_cart"
-            android:onClick="onSearch" />
+            android:onClick="onBrowsePantry" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/learnButton"
