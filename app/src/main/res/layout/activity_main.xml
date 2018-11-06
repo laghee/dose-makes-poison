@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:anrdoid="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,8 +19,7 @@
         android:textSize="90sp"
         android:textColor="@color/secondaryColor"
         android:textStyle="bold|italic"
-        android:fontFamily="cursive"
-        />
+        android:fontFamily="cursive" />
 
     <FrameLayout
         android:id="@+id/button_frame"
@@ -27,51 +27,51 @@
         android:layout_height="match_parent"
         android:layout_below="@id/main_title" >
 
-        <android.support.v7.widget.AppCompatImageButton
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/searchButton"
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_gravity="top|start"
             android:layout_margin="20dp"
-            android:adjustViewBounds="true"
-            android:background="@android:drawable/screen_background_light"
-            android:contentDescription="@string/search_button"
-            android:cropToPadding="true"
-            android:onClick="onSearch"
-            android:scaleType="fitCenter"
-            android:src="@drawable/search"
-            android:tint="@color/secondaryColor" />
+            android:text="@string/search_button"
+            android:gravity="top|center"
+            android:textColor="@color/secondaryColor"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:background="@drawable/twotone_search_box"
+            android:onClick="onSearch" />
 
-
-        <android.support.v7.widget.AppCompatImageButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/pantryButton"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:layout_margin="15dp"
             android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:background="@android:drawable/screen_background_light"
-            android:contentDescription="@string/pantry_button"
-            android:cropToPadding="true"
-            android:onClick="onBrowsePantry"
-            android:scaleType="fitCenter"
-            android:src="@drawable/pantry"
-            android:tint="@color/secondaryColor" />
+            android:layout_margin="15dp"
+            android:text="@string/pantry_button"
+            android:gravity="top|center"
+            android:textColor="@color/secondaryColor"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:background="@drawable/twotone_shopping_cart"
+            android:onClick="onSearch" />
 
-
-        <android.support.v7.widget.AppCompatImageButton
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/learnButton"
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_margin="20dp"
             android:layout_gravity="bottom|end"
             android:adjustViewBounds="true"
-            android:background="@android:drawable/screen_background_light"
+            android:background="@drawable/twotone_school"
+            android:text="@string/learn_button"
+            android:textColor="@color/secondaryColor"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:gravity="top|center"
             android:contentDescription="@string/learn_button"
             android:cropToPadding="true"
             android:onClick="onLearnMore"
-            android:scaleType="fitCenter"
-            android:src="@drawable/research"
             android:tint="@color/secondaryColor" />
 
     </FrameLayout>

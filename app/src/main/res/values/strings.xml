@@ -12,9 +12,9 @@
     <string name="search_hint">Search ingredients</string>
     <string name="search_button">Ingredient Search</string>
     <string name="share_info">Share tox info</string>
-    <string name="pantry_button">What\'s In My Pantry</string>
+    <string name="pantry_button">My Pantry</string>
     <string name="pantry_add">Add to Your Pantry</string>
-    <string name="learn_button">Learn More About Toxicity</string>
+    <string name="learn_button">Learn More</string>
     <string name="comparison_text">The lethal median dose for %1$s is %2$d mg/kg. That means
         %1$s is about as toxic as %3$s.</string>
     <string name="results_disclaimer">\n\nRemember: Toxicity, like life, is complicated! The point
