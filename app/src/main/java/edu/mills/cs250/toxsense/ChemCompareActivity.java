@@ -72,7 +72,6 @@ public class ChemCompareActivity extends AppCompatActivity {
     private static final String ARSENIC = "arsenic";
     private static final String CYANIDE = "cyanide";
     private static final String BETWEEN = "between";
-    private static final String ROW_ID = "pantryRowId";
     private static final String SEARCH_DONE = "searchPerformed";
     private static final String CHEM_NAME = "chemName";
     private static final String CHEM_ID = "chemId";
@@ -465,9 +464,7 @@ public class ChemCompareActivity extends AppCompatActivity {
                     return lethalDoseVal;
                 }
             } catch (IOException e) {
-                Log.d(TAG, "Caught IO Exception" + e.getMessage());
-                Toast.makeText(ChemCompareActivity.this, "IO EXCEPTION: "
-                        + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Caught IO Exception: " + e.getMessage());
                 return null;
             }
         }
@@ -498,13 +495,17 @@ public class ChemCompareActivity extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     Log.d(TAG, "Caught error: " + e.getMessage());
                 }
-            } else {
-                Log.d(TAG, "NO LD50 NUMBER FOUND!");
+            } else if (ld50Text == null) {
+                Log.d(TAG, "LD50 VALUE IS NULL!");
                 Toast.makeText(ChemCompareActivity.this,
-                        "NO TOXICITY VALUE FOUND ON TOXNET!", Toast.LENGTH_SHORT).show();
+                        "OOPS! THIS SUBSTANCE IS NOT LISTED ON TOXNET!", Toast.LENGTH_SHORT).show();
+            } else {
+                    Log.d(TAG, "LD50 VALUE IS AN EMPTY STRING!");
+                    Toast.makeText(ChemCompareActivity.this,
+                            "SORRY! CORRECT COMPARISON VALUE CANNOT BE FOUND ON TOXNET!", Toast.LENGTH_SHORT).show();
+                }
             }
         }
-    }
 
         private class CheckPantryForChemNameTask extends AsyncTask<String, Void, String[]> {
         @Override
