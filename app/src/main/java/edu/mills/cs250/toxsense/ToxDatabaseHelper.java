@@ -15,7 +15,6 @@ class ToxDatabaseHelper extends SQLiteAssetHelper {
 
     ToxDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        setForcedUpgrade();
         Log.d(TAG, "DatabaseHelper... initialized: "
                 + context.getDatabasePath(DATABASE_NAME).getAbsolutePath());
     }
